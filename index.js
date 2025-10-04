@@ -16,7 +16,41 @@ app.get('/estado', (req, res) => {
     res.json({'ok':true});    
 })
 
+//RUTA GET PARA OBTENER TODOS LOS USUARIOS
 
+app.get('/usuarios', async (req, res) => {
+    try {
+        const sql = 'SELECT * FROM usuarios WHERE activo = 1';
+        
+        const [results, fields] = await conexion.query(sql);
+
+        // Verificar si hay resultados
+        if (results.length === 0) {
+            return res.status(404).json({
+                ok: false,
+                mensaje: 'No se encontraron usuarios activos',
+                usuarios: []
+            });
+        }
+
+        // Respuesta exitosa
+        res.status(200).json({
+            ok: true,
+            cantidad: results.length,
+            usuarios: results
+        });
+
+    } catch (err) {
+        console.error('Error al obtener usuarios:', err);
+        
+        // Enviar respuesta de error al cliente
+        res.status(500).json({
+            ok: false,
+            mensaje: 'Error al obtener los usuarios',
+
+        });
+    }
+});
 
 // RUTA GET PARA OBTENER 1 USUARIO POR ID
 app.get('/usuarios/:usuario_id', async(req, res) => {
