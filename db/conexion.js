@@ -4,6 +4,6 @@ export const conexion = await mysql.createConnection({
     host: 'localhost',
     user: 'reservas',
     database: 'reservas',
-    password: 'reservas25',
+    password: 'reservas.25',
     multipleStatements: true
 })
