@@ -122,6 +122,36 @@ app.get('/usuarios/:usuario_id', async(req, res) => {
     }
 });
 
+// RUTA POST PARA CREAR 1 USUARIO POR ID
+app.post('/usuarios', async (req, res)=>{    
+    try{
+
+        if(!req.body.nombre || !req.body.apellido || !req.body.nombre_usuario || !req.body.contrasenia || !req.body.tipo_usuario || !req.body.celular || !req.body.foto ){
+            return res.status(400).json({
+                estado: false,
+                mensaje: 'Faltan campos requeridos.'
+            })
+        }
+        const {nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto} = req.body;
+        
+        const valores = [nombre,apellido,nombre_usuario,contrasenia,tipo_usuario,celular,foto];
+        const sql = 'INSERT INTO usuarios (nombre, apellido, nombre_usuario, contrasenia, tipo_usuario,celular,foto) VALUES (?,?,?,?,?,?,?)';
+
+        const [result]= await conexion.execute(sql, valores);
+        
+        res.status(201).json({
+            estado: true,
+            mensaje: `Usuario creado con id ${result.insertId}.`
+        })
+    }catch (err) {
+        console.log('Error en POST /usuarios', err);
+        res.status(500).json({
+            estado: false,
+            mensaje: 'Error interno del servidor.'
+        })
+    }
+})
+
 process.loadEnvFile();
 
 app.listen(process.env.PUERTO, () => {
