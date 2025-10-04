@@ -45,6 +45,8 @@ app.put('/usuarios/:usuario_id', async (req, res) => {
     } catch (err) {
         console.log('Error en PUT /usuarios/:usuario_id', err);
         res.status(500).json({ estado: false, mensaje: 'Error interno del servidor.' });
+    }
+});
 
 app.get('/estado', (req, res) => {
     res.json({'ok':true});    
@@ -118,7 +120,7 @@ app.get('/usuarios/:usuario_id', async(req, res) => {
             mensaje: 'Error interno del servidor'
         })
     }
-})
+});
 
 process.loadEnvFile();
 
