@@ -89,38 +89,72 @@ app.get('/usuarios', async (req, res) => {
 });
 
 // RUTA GET PARA OBTENER 1 USUARIO POR ID
-app.get('/usuarios/:usuario_id', async(req, res) => {
+ app.get('/usuarios/:usuario_id', async(req, res) => {
 
-    try {
+     try {
         
-        const usuario_id = req.params.usuario_id;
-        const sql = `SELECT * FROM usuarios WHERE activo = 1 and usuario_id = ?` ;
-        const valores = [usuario_id];
+         const usuario_id = req.params.usuario_id;
+         const sql = `SELECT * FROM usuarios WHERE activo = 1 and usuario_id = ?` ;
+         const valores = [usuario_id];
 
-        const [results, fields] = await conexion.execute(sql, valores);
+         const [results, fields] = await conexion.execute(sql, valores);
         
-        if(results.length === 0){
-            return res.status(404).json({
-                estado:false,
-                mensaje:'No se encuentra ese usuario. Por favor vuelva a ingresar'
+         if(results.length === 0){
+             return res.status(404).json({
+                 estado:false,
+                 mensaje:'No se encuentra ese usuario. Por favor vuelva a ingresar'
+             })
+         }
+
+         res.json({
+             'estado':true, 
+             'usuario':results [0] 
+        
+         });
+
+
+     } catch (err) {
+         console.log('Error en GET/usuarios/:usuario_id');
+         res.status(500).json({
+             estado: false,
+             mensaje: 'Error interno del servidor'
+         })
+     }
+ });
+
+// RUTA POST PARA CREAR 1 USUARIO POR ID
+
+app.post('/usuarios', async (req, res)=>{    
+    try{
+
+        // CONTROL DE DATOS REQUERIDOS
+        if(!req.body.nombre || !req.body.apellido || !req.body.nombre_usuario || !req.body.contrasenia || !req.body.tipo_usuario || !req.body.celular || !req.body.foto ){
+            return res.status(400).json({
+                estado: false,
+                mensaje: 'Faltan campos requeridos.'
             })
         }
-
-        res.json({
-            'estado':true, 
-            'usuario':results [0] 
+        const {nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto} = req.body;
         
-        });
+        // valores que se reemplazarán por los signos de ?
+        const valores = [nombre,apellido,nombre_usuario,contrasenia,tipo_usuario,celular,foto];
+        const sql = 'INSERT INTO usuarios (nombre, apellido, nombre_usuario, contrasenia, tipo_usuario,celular,foto) VALUES (?,?,?,?,?,?,?)';
 
-
-    } catch (err) {
-        console.log('Error en GET/usuarios/:usuario_id');
+        const [result]= await conexion.execute(sql, valores);
+        
+        res.status(201).json({
+            estado: true,
+            mensaje: `Usuario creado con id ${result.insertId}.`
+        })
+    }catch (err) {
+        console.log('Error en POST /usuarios', err);
         res.status(500).json({
             estado: false,
-            mensaje: 'Error interno del servidor'
+            mensaje: 'Error interno del servidor.'
         })
     }
-});
+})
+
 
 process.loadEnvFile();
 
