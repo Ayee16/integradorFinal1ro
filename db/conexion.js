@@ -5,5 +5,5 @@ export const conexion = await mysql.createConnection({
     user: 'reservas',
     database: 'reservas',
     password: 'reservas25',
-    multipleStatements: true
+    multipleStatements: true   
 })
