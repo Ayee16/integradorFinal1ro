@@ -88,6 +88,78 @@ app.get('/usuarios', async (req, res) => {
     }
 });
 
+
+//RUTA GET PARA TODOS LOS SALONES
+app.get('/salones', async (req, res) => {
+    try {
+        const sql = 'SELECT * FROM salones WHERE activo = 1';
+        
+        const [results, fields] = await conexion.query(sql);
+
+        // Verificar si hay resultados
+        if (results.length === 0) {
+            return res.status(404).json({
+                ok: false,
+                mensaje: 'No se encontraron salones activos',
+                salones: []
+            });
+        }
+
+        // Respuesta exitosa
+        res.status(200).json({
+            ok: true,
+            cantidad: results.length,
+            salones: results
+        });
+
+    } catch (err) {
+        console.error('Error al obtener salones:', err);
+        
+        // Enviar respuesta de error al cliente
+        res.status(500).json({
+            ok: false,
+            mensaje: 'Error al obtener los salones',
+
+        });
+    }
+});
+
+
+//RUTA GET PARA TODOS LOS SERVICIOS
+app.get('/servicios', async (req, res) => {
+    try {
+        const sql = 'SELECT * FROM servicios WHERE activo = 1';
+        
+        const [results, fields] = await conexion.query(sql);
+
+        // Verificar si hay resultados
+        if (results.length === 0) {
+            return res.status(404).json({
+                ok: false,
+                mensaje: 'No se encontraron servicios activos',
+                servicios: []
+            });
+        }
+
+        // Respuesta exitosa
+        res.status(200).json({
+            ok: true,
+            cantidad: results.length,
+            servicios: results
+        });
+
+    } catch (err) {
+        console.error('Error al obtener servicios:', err);
+        
+        // Enviar respuesta de error al cliente
+        res.status(500).json({
+            ok: false,
+            mensaje: 'Error al obtener los servicios',
+
+        });
+    }
+});
+
 // RUTA GET PARA OBTENER 1 USUARIO POR ID
 app.get('/usuarios/:usuario_id', async(req, res) => {
 
