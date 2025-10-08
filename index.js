@@ -152,6 +152,41 @@ app.post('/usuarios', async (req, res)=>{
     }
 })
 
+//RUTA GET PARA TODOS LOS SERVICIOS
+app.get('/servicios', async (req, res) => {
+    try {
+        const sql = 'SELECT * FROM servicios WHERE activo = 1';
+        
+        const [results, fields] = await conexion.query(sql);
+
+        // Verificar si hay resultados
+        if (results.length === 0) {
+            return res.status(404).json({
+                ok: false,
+                mensaje: 'No se encuentra dicho servicio. Por favor vuelva a ingresar',
+                servicios: []
+            });
+        }
+
+        // Respuesta exitosa
+        res.status(200).json({
+            ok: true,
+            cantidad: results.length,
+            servicios: results
+        });
+
+    } catch (error) {
+        console.error('Error al obtener servicios:', error);
+        
+        // Enviar respuesta de error al cliente
+        res.status(500).json({
+            ok: false,
+            mensaje: 'Error interno del servidor',
+
+        });
+    }
+});
+
 // ruta GET para obtener 1 SERVICIO POR ID
 app.get('/servicios/:servicio_id', async(req, res) => {
 
@@ -185,6 +220,41 @@ app.get('/servicios/:servicio_id', async(req, res) => {
         })
     }
 })
+
+//RUTA GET PARA TODOS LOS SALONES
+app.get('/salones', async (req, res) => {
+    try {
+        const sql = 'SELECT * FROM salones WHERE activo = 1';
+        
+        const [results, fields] = await conexion.query(sql);
+
+        // Verificar si hay resultados
+        if (results.length === 0) {
+            return res.status(404).json({
+                ok: false,
+                mensaje: 'No se han encontrado salones activos. Por favor vuelva a ingresar',
+                salones: []
+            });
+        }
+
+        // Respuesta exitosa
+        res.status(200).json({
+            ok: true,
+            cantidad: results.length,
+            salones: results
+        });
+
+    } catch (error) {
+        console.error('Error al obtener salones:', error);
+        
+        // Enviar respuesta de error al cliente
+        res.status(500).json({
+            ok: false,
+            mensaje: 'Error interno del servidor',
+
+        });
+    }
+});
 
 //RUTA PARA TENER 1 SALON POR ID
 app.get('/salones/:salon_id', async(req, res) => {
