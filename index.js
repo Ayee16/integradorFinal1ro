@@ -152,6 +152,32 @@ app.post('/usuarios', async (req, res)=>{
     }
 })
 
+// RUTA PARA ELIMINAR UN USUARIO POR ID
+
+app.delete('/usuarios/:usuario_id', async (req,res) => {
+    try {
+        const usuario_id = req.params.usuario_id;
+        const [results] = await conexion.execute('SELECT * FROM usuarios WHERE usuario_id = ? and activo = 1', [usuario_id]);
+        if (results.length === 0) {
+            return res.status(404).json({
+                estado: false,
+                mensaje: 'Usuario no encontrado o inactivo.'
+            });
+        }
+        await conexion.execute('UPDATE usuarios SET activo = 0 WHERE usuario_id = ?', [usuario_id]);
+        res.json({
+            estado: true,
+            mensaje: 'Usuario eliminado correctamente.'
+        });
+    } catch (err) {
+        console.log('Error en DELETE /usuarios/:usuario_id', err);
+        res.status(500).json({
+            estado: true,
+            mensaje: 'Error interno del servidor'
+        });
+    }
+});
+
 //RUTA GET PARA TODOS LOS SERVICIOS
 app.get('/servicios', async (req, res) => {
     try {
