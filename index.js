@@ -247,6 +247,31 @@ app.get('/servicios/:servicio_id', async(req, res) => {
     }
 })
 
+//RUTA PARA ELIMINAR UN SERVICIO POR ID
+app.delete('/servicios/:servicio_id', async (req,res) => {
+    try {
+        const servicio_id = req.params.servicio_id;
+        const [results] = await conexion.execute('SELECT * FROM servicios WHERE servicio_id = ? and activo = 1', [servicio_id]);
+        if (results.length === 0) {
+            return res.status(404).json({
+                estado: false,
+                mensaje: 'Servicio no encontrado o inactivo.'
+            });
+        }
+        await conexion.execute('UPDATE servicios SET activo = 0 WHERE servicio_id = ?', [servicio_id]);
+        res.json({
+            estado: true,
+            mensaje: 'Servicio eliminado correctamente.'
+        });
+    } catch (err) {
+        console.log('Error en DELETE /servicios/:servicio_id', err);
+        res.status(500).json({
+            estado: true,
+            mensaje: 'Error interno del servidor'
+        });
+    }
+});
+
 //RUTA GET PARA TODOS LOS SALONES
 app.get('/salones', async (req, res) => {
     try {
@@ -316,9 +341,30 @@ app.get('/salones/:salon_id', async(req, res) => {
     }
 })
 
-
-
-
+//RUTA PARA ELIMINAR UN SALON POR ID
+app.delete('/salones/:salon_id', async (req,res) => {
+    try {
+        const salon_id = req.params.salon_id;
+        const [results] = await conexion.execute('SELECT * FROM salones WHERE :salon_id = ? and activo = 1', [salon_id]);
+        if (results.length === 0) {
+            return res.status(404).json({
+                estado: false,
+                mensaje: 'Salón no encontrado o inactivo.'
+            });
+        }
+        await conexion.execute('UPDATE salones SET activo = 0 WHERE :salon_id = ?', [salon_id]);
+        res.json({
+            estado: true,
+            mensaje: 'Salón eliminado correctamente.'
+        });
+    } catch (err) {
+        console.log('Error en DELETE /salones/:salon_id', err);
+        res.status(500).json({
+            estado: true,
+            mensaje: 'Error interno del servidor'
+        });
+    }
+});
 
 process.loadEnvFile();
 
