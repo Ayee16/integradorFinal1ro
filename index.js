@@ -11,43 +11,6 @@ const app = express();
 
 app.use(express.json());
 
-app.put('/usuarios/:usuario_id', async (req, res) => {
-    try {
-        const usuario_id = req.params.usuario_id;
-        const { nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto } = req.body;
-
-        if(!nombre || !apellido || !nombre_usuario || !contrasenia || !tipo_usuario){
-            return res.status(400).json({ estado: false, mensaje: 'Faltan campos requeridos.' });
-        }
-        
-        const [results] = await conexion.execute(`SELECT * FROM usuarios WHERE usuario_id = ? AND activo = 1`, [usuario_id]);
-        if(results.length === 0){
-            return res.status(404).json({ estado: false, mensaje: 'Usuario no existe.' });
-        }
-
-        const sql = `UPDATE usuarios SET 
-                    nombre = ?, 
-                    apellido = ?, 
-                    nombre_usuario = ?, 
-                    contrasenia = ?, 
-                    tipo_usuario = ?, 
-                    celular = ?, 
-                    foto = ?
-                    WHERE usuario_id = ?`;
-        const valores = [nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular || null, foto || null, usuario_id];
-
-        await conexion.execute(sql, valores);
-
-        const [usuarioActualizado] = await conexion.execute(`SELECT * FROM usuarios WHERE usuario_id = ?`, [usuario_id]);
-        console.log(` Usuario actualizado (ID: ${usuario_id})`, usuarioActualizado[0]);
-
-        res.json({ estado: true, mensaje: 'Usuario modificado.', usuario: usuarioActualizado[0] });
-    } catch (err) {
-        console.log('Error en PUT /usuarios/:usuario_id', err);
-        res.status(500).json({ estado: false, mensaje: 'Error interno del servidor.' });
-    }
-});
-
 app.get('/estado', (req, res) => {
     res.json({'ok':true});    
 })
@@ -151,6 +114,47 @@ app.post('/usuarios', async (req, res)=>{
         })
     }
 })
+
+
+// RUTA PUT PARA EDITAR UN USUARIO POR ID
+
+app.put('/usuarios/:usuario_id', async (req, res) => {
+    try {
+        const usuario_id = req.params.usuario_id;
+        const { nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto } = req.body;
+
+        if(!nombre || !apellido || !nombre_usuario || !contrasenia || !tipo_usuario){
+            return res.status(400).json({ estado: false, mensaje: 'Faltan campos requeridos.' });
+        }
+        
+        const [results] = await conexion.execute(`SELECT * FROM usuarios WHERE usuario_id = ? AND activo = 1`, [usuario_id]);
+        if(results.length === 0){
+            return res.status(404).json({ estado: false, mensaje: 'Usuario no existe.' });
+        }
+
+        const sql = `UPDATE usuarios SET 
+                    nombre = ?, 
+                    apellido = ?, 
+                    nombre_usuario = ?, 
+                    contrasenia = ?, 
+                    tipo_usuario = ?, 
+                    celular = ?, 
+                    foto = ?
+                    WHERE usuario_id = ?`;
+        const valores = [nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular || null, foto || null, usuario_id];
+
+        await conexion.execute(sql, valores);
+
+        const [usuarioActualizado] = await conexion.execute(`SELECT * FROM usuarios WHERE usuario_id = ?`, [usuario_id]);
+        console.log(` Usuario actualizado (ID: ${usuario_id})`, usuarioActualizado[0]);
+
+        res.json({ estado: true, mensaje: 'Usuario modificado.', usuario: usuarioActualizado[0] });
+    } catch (err) {
+        console.log('Error en PUT /usuarios/:usuario_id', err);
+        res.status(500).json({ estado: false, mensaje: 'Error interno del servidor.' });
+    }
+});
+
 
 // RUTA PARA ELIMINAR UN USUARIO POR ID
 
@@ -277,6 +281,45 @@ app.post('/servicios', async (req, res)=>{
     }
 })
 
+// RUTA PUT PARA EDITAR UN SERVICIO POR servicio_id
+app.put('/servicios/:servicio_id', async (req, res) => {
+    try {
+        const { servicio_id } = req.params;
+        const { descripcion, importe } = req.body;
+
+        if (!descripcion || !importe) {
+            return res.status(400).json({
+                estado: false,
+                mensaje: 'Faltan campos requeridos.'
+            });
+        }
+
+        const valores = [descripcion, importe, servicio_id];
+        const sql = 'UPDATE servicios SET descripcion = ?, importe = ? WHERE servicio_id = ?';
+
+        const [result] = await conexion.execute(sql, valores);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                estado: false,
+                mensaje: `No se encontró un servicio con servicio_id ${servicio_id}.`
+            });
+        }
+
+        res.status(200).json({
+            estado: true,
+            mensaje: `Servicio con servicio_id ${servicio_id} actualizado correctamente.`
+        });
+    } catch (err) {
+        console.log('Error en PUT /servicios/:servicio_id', err);
+        res.status(500).json({
+            estado: false,
+            mensaje: 'Error interno del servidor.'
+        });
+    }
+});
+
+
 //RUTA PARA ELIMINAR UN SERVICIO POR ID
 app.delete('/servicios/:servicio_id', async (req,res) => {
     try {
@@ -400,6 +443,70 @@ app.post('/salones', async (req, res)=>{
         })
     }
 })
+
+
+//RUTA PUT EDITAR SALON POR ID:
+
+app.put('/salones/:salon_id', async (req, res) => {
+    try {
+        const salon_id = req.params.salon_id;
+        const { titulo, direccion, capacidad, importe } = req.body;
+
+        // Validación de campos requeridos
+        if (!titulo || !direccion || !capacidad || !importe) {
+            return res.status(400).json({ 
+                estado: false, 
+                mensaje: 'Faltan campos requeridos.' 
+            });
+        }
+
+        // Verificar que el salón exista y esté activo
+        const [results] = await conexion.execute(
+            'SELECT * FROM salones WHERE salon_id = ? AND activo = 1', 
+            [salon_id]
+        );
+        if (results.length === 0) {
+            return res.status(404).json({ 
+                estado: false, 
+                mensaje: 'Salón no existe o está inactivo.' 
+            });
+        }
+
+        // Actualizar los datos del salón
+        const sql = `
+            UPDATE salones SET 
+                titulo = ?, 
+                direccion = ?, 
+                capacidad = ?, 
+                importe = ?
+            WHERE salon_id = ?
+        `;
+        const valores = [titulo, direccion, capacidad, importe, salon_id];
+
+        await conexion.execute(sql, valores);
+
+        // Traer el salón actualizado
+        const [salonActualizado] = await conexion.execute(
+            'SELECT * FROM salones WHERE salon_id = ?', 
+            [salon_id]
+        );
+        console.log(`Salón actualizado (ID: ${salon_id})`, salonActualizado[0]);
+
+        res.json({ 
+            estado: true, 
+            mensaje: 'Salón modificado correctamente.', 
+            salon: salonActualizado[0] 
+        });
+
+    } catch (err) {
+        console.log('Error en PUT /salones/:salon_id', err);
+        res.status(500).json({ 
+            estado: false, 
+            mensaje: 'Error interno del servidor.' 
+        });
+    }
+});
+
 
 //RUTA PARA ELIMINAR UN SALON POR ID
 app.delete('/salones/:salon_id', async (req,res) => {
