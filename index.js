@@ -247,6 +247,36 @@ app.get('/servicios/:servicio_id', async(req, res) => {
     }
 })
 
+// RUTA POST PARA CREAR 1 SERVICIO POR ID
+app.post('/servicios', async (req, res)=>{    
+    try{
+
+        if( !req.body.descripcion || !req.body.importe ){
+            return res.status(400).json({
+                estado: false,
+                mensaje: 'Faltan campos requeridos.'
+            })
+        }
+        const {descripcion, importe} = req.body;
+        
+        const valores = [descripcion,importe];
+        const sql = 'INSERT INTO servicios (descripcion, importe) VALUES (?,?)';
+
+        const [result]= await conexion.execute(sql, valores);
+        
+        res.status(201).json({
+            estado: true,
+            mensaje: `Servicio creado con id ${result.insertId}.`
+        })
+    }catch (err) {
+        console.log('Error en POST /servicios', err);
+        res.status(500).json({
+            estado: false,
+            mensaje: 'Error interno del servidor.'
+        })
+    }
+})
+
 //RUTA PARA ELIMINAR UN SERVICIO POR ID
 app.delete('/servicios/:servicio_id', async (req,res) => {
     try {
@@ -337,6 +367,36 @@ app.get('/salones/:salon_id', async(req, res) => {
         res.status(500).json({
             estado: false,
             mensaje: 'Error interno del servidor'
+        })
+    }
+})
+
+// RUTA POST PARA CREAR 1 SALON POR ID
+app.post('/salones', async (req, res)=>{    
+    try{
+
+        if( !req.body.titulo || !req.body.direccion || !req.body.latitud || !req.body.longitud || !req.body.capacidad || !req.body.importe ){
+            return res.status(400).json({
+                estado: false,
+                mensaje: 'Faltan campos requeridos.'
+            })
+        }
+        const {titulo, direccion, latitud, longitud, capacidad, importe} = req.body;
+        
+        const valores = [titulo,direccion,latitud,longitud,capacidad,importe];
+        const sql = 'INSERT INTO salones (titulo, direccion, latitud, longitud, capacidad, importe) VALUES (?,?,?,?,?,?)';
+
+        const [result]= await conexion.execute(sql, valores);
+        
+        res.status(201).json({
+            estado: true,
+            mensaje: `Salon creado con id ${result.insertId}.`
+        })
+    }catch (err) {
+        console.log('Error en POST /salones', err);
+        res.status(500).json({
+            estado: false,
+            mensaje: 'Error interno del servidor.'
         })
     }
 })
