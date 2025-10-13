@@ -418,16 +418,16 @@ app.get('/salones/:salon_id', async(req, res) => {
 app.post('/salones', async (req, res)=>{    
     try{
 
-        if( !req.body.titulo || !req.body.direccion || !req.body.latitud || !req.body.longitud || !req.body.capacidad || !req.body.importe ){
+        if( !req.body.titulo || !req.body.direccion || !req.body.capacidad || !req.body.importe ){
             return res.status(400).json({
                 estado: false,
                 mensaje: 'Faltan campos requeridos.'
             })
         }
-        const {titulo, direccion, latitud, longitud, capacidad, importe} = req.body;
+        const {titulo, direccion, capacidad, importe} = req.body;
         
-        const valores = [titulo,direccion,latitud,longitud,capacidad,importe];
-        const sql = 'INSERT INTO salones (titulo, direccion, latitud, longitud, capacidad, importe) VALUES (?,?,?,?,?,?)';
+        const valores = [titulo,direccion,capacidad,importe];
+        const sql = 'INSERT INTO salones (titulo, direccion, capacidad, importe) VALUES (?,?,?,?)';
 
         const [result]= await conexion.execute(sql, valores);
         
