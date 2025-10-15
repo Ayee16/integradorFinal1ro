@@ -10,8 +10,8 @@ export default class UsuariosServicio {
         return this.usuarios.buscarTodos();
     }
 
-    buscarPorId = (salon_id) => {
-
+    buscarPorId = (usuario_id) => {
+        return this.usuarios.buscarPorId(usuario_id);
     }
 
     modificar = (salon_id,datos) => {
