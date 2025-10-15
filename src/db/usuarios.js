@@ -22,9 +22,15 @@ export default class Usuarios {
         
     };
 
-    crear =async(req,res) =>{
-        
-    };
+    crear = async(usuario) =>{
+            const {nombre, apellido, nombre_usuario, tipo_usuario, contrasenia} = usuario;
+            const sql = 'INSERT INTO usuarios (nombre, apellido, nombre_usuario, tipo_usuario, contrasenia) VALUES (?,?,?,?,?)' ;
+            const [result] = await conexion.execute(sql,[nombre, apellido, nombre_usuario, tipo_usuario, contrasenia]);
+            if (result.affectedRows == 0){
+                return null //en capa de datos no se retorna informacion solo retorna datos puros
+            }
+            return this.buscarPorId(result.insertId);
+        }
 
     eliminar =async(req,res) =>{
         
