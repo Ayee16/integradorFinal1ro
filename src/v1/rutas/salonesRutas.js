@@ -24,7 +24,8 @@ router.post('/',
     ],
     
     salonesControlador.crear);
-// router.delete('/', salonesControlador.borrar);
+
+router.delete('/:salon_id', salonesControlador.eliminar);
 
 
 export {router} ;

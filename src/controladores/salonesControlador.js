@@ -111,5 +111,30 @@ export default class SalonesControlador{
         }
     }
     
+    eliminar = async (req, res) => {
+    try {
+        const salon_id = req.params.salon_id;
+        const salonEliminado = await this.SalonesServicio.eliminar(salon_id);
+        
+        if (!salonEliminado) {
+            return res.status(404).json({
+                estado: false,
+                mensaje: 'Salón no encontrado'
+            });
+        }
+        
+        res.json({
+            estado: true,
+            mensaje: 'Salón eliminado correctamente'
+        });
+
+    } catch (error) {
+        console.log('Error en DELETE /salones/:salon_id', error);
+        res.status(500).json({
+            estado: false,
+            mensaje: 'Error interno del servidor'
+        });
+    }
+}
 }
 

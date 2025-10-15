@@ -39,6 +39,13 @@ export default class Salones {
             }
             return this.buscarPorId(result.insertId);
         }
+
+    eliminar = async(salon_id) =>{
+        const sql = 'UPDATE salones SET activo = 0 WHERE salon_id = ?'
+        const [result] = await conexion.execute(sql, [salon_id]);
+        if (result.affectedRows === 0) {
+            return null;
+        }
+        return true; // o podrías retornar el salon_id eliminado
+    }
 }
-
-

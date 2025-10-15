@@ -25,4 +25,12 @@ export default class SalonesServicio {
     crear = (salon) => {
         return this.salones.crear(salon);
     }
+
+    eliminar = async (salon_id) =>{
+    const existe = await this.salones.buscarPorId(salon_id);
+    if (!existe) {
+        return null;
+    }
+    return this.salones.eliminar(salon_id);
+    }
 }
