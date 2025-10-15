@@ -25,6 +25,28 @@ export default class UsuariosControlador{
 
 
     buscarPorId = async(req,res) => {
+        try{
+            const usuario_id = req.params.usuario_id;
+            const usuario = await this.UsuarioServicio.buscarPorId(usuario_id);
+            
+            if (!usuario){
+                return res.status(404).json({
+                    estado: false,
+                    mensaje: 'Usuario no encontrado'
+                })
+            }
+            
+            res.json({
+                estado: true,
+                usuario: usuario
+            })
+        }catch(error){
+            console.log('Error en GET /usuarios/usuario_id', error)
+            res.status(500).json({
+                estado: false,
+                mensaje: 'Error interno del servidor'
+            })
+        }
     }
 
     modificar = async(req,res) => {
