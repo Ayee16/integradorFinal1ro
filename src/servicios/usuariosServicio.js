@@ -7,7 +7,7 @@ export default class UsuariosServicio {
     }
 
     buscarTodos = () => {
-    
+        return this.usuarios.buscarTodos();
     }
 
     buscarPorId = (salon_id) => {
