@@ -53,6 +53,38 @@ export default class UsuariosControlador{
     }
 
     crear = async (req, res) => {
+        try {
+            const {nombre, apellido, nombre_usuario, tipo_usuario, contrasenia} = req.body;
+            const usuario =  {
+                nombre, 
+                apellido, 
+                nombre_usuario, 
+                tipo_usuario,
+                contrasenia
+            }   
+
+            const nuevoUsuario = await this.UsuarioServicio.crear(usuario);
+
+            if (!nuevoUsuario) {
+                return res.status(404).json({
+                    estado: false,
+                    mensaje: 'Usuario no creado'
+                })
+            }
+
+            res.json({
+                estado: true, 
+                mensaje: 'Usuario creado!',
+                usuario: nuevoUsuario
+            });
+    
+        } catch (err) {
+            console.log('Error en POST /usuarios/', err);
+            res.status(500).json({
+                estado: false,
+                mensaje: 'Error interno del servidor.'
+            });
+        }
     }
     
     eliminar = async (req, res) => {

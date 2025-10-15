@@ -18,8 +18,8 @@ export default class UsuariosServicio {
 
     }
 
-    crear = (salon) => {
-
+    crear = (usuario) => {
+        return this.usuarios.crear(usuario);
     }
 
     eliminar = async (salon_id) =>{

@@ -18,9 +18,11 @@ router.put('/:usuario_id', usuariosControlador.modificar);
 //CAMBIAR POR CAMPOS DE USUARIOS NO ME ACUERDO CUALES SON
 router.post('/', 
     [
-        check('nombre', 'El titulo es necesario').notEmpty(),
-        check('apellido', 'La dirección es necesaria.').notEmpty(),
-        check('nombre_usuario', 'La capacidad es necesaria.').notEmpty(),
+        check('nombre', 'El nombre es necesario').notEmpty(),
+        check('apellido', 'El apellido es necesario.').notEmpty(),
+        check('nombre_usuario', 'El nombre de usuario es necesario.').notEmpty(),
+        check('tipo_usuario', 'El tipo de usuario es necesario.').notEmpty(),
+        check('contrasenia', 'La contransenia es necesaria.').notEmpty(),
         validarCampos
     ],
     usuariosControlador.crear);
