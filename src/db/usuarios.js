@@ -19,11 +19,11 @@ export default class Usuarios {
     }
 
     modificar =async(usuario_id,datos) =>{
-      const camposAActualizar = Object.keys(datos); //obtengo claves
-        const valoresAActualizar = Object.values(datos); //obtengo valores
-        const setValores = camposAActualizar.map(campo => `${campo} = ?`).join(', '); //junto claves y le agrego ?
-        const parametros = [...valoresAActualizar,usuario_id]; //junto valores y salon id y lo meto en const parametros
-        const sql = `UPDATE usuarios SET ${setValores} WHERE usuario_id = ?`; //consulta sql
+      const camposAActualizar = Object.keys(datos); 
+        const valoresAActualizar = Object.values(datos); 
+        const setValores = camposAActualizar.map(campo => `${campo} = ?`).join(', '); 
+        const parametros = [...valoresAActualizar,usuario_id]; 
+        const sql = `UPDATE usuarios SET ${setValores} WHERE usuario_id = ?`; 
         const [result] = await conexion.execute(sql,parametros);
         if (result.affectedRows ===0){
             return null;
@@ -36,7 +36,7 @@ export default class Usuarios {
             const sql = 'INSERT INTO usuarios (nombre, apellido, nombre_usuario, tipo_usuario, contrasenia,celular) VALUES (?,?,?,?,?,?)' ;
             const [result] = await conexion.execute(sql,[nombre, apellido, nombre_usuario, tipo_usuario, contrasenia,celular]);
             if (result.affectedRows == 0){
-                return null //en capa de datos no se retorna informacion solo retorna datos puros
+                return null 
             }
             return this.buscarPorId(result.insertId);
         }

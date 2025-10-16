@@ -17,7 +17,7 @@ export default class UsuariosServicio {
     modificar = (usuario_id,datos) => {
         const existe = this.usuarios.buscarPorId(usuario_id);
         if (!existe) {
-            return { error: 'Usuario no encontrado' }; //cambiar a null
+            return { error: 'Usuario no encontrado' }; 
         }
         return this.usuarios.modificar(usuario_id,datos);
     }
@@ -27,7 +27,11 @@ export default class UsuariosServicio {
         return this.usuarios.crear(usuario);
     }
 
-    eliminar = async (salon_id) =>{
-        
+    eliminar = async (usuario_id) => {
+        const existe = await this.usuarios.buscarPorId(usuario_id);
+        if (!existe) {
+            return null;
+        }
+        return this.usuarios.eliminar(usuario_id);
     }
 }

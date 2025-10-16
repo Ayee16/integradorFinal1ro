@@ -1,15 +1,12 @@
 import express from 'express';
-// import apicache from 'apicache'
 import UsuariosControlador from '../../controladores/usuariosControlador.js';
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
 
 const usuariosControlador = new UsuariosControlador();
 const router = express.Router();
-// let cache = apicache.middleware
 
-router.get('/', usuariosControlador.buscarTodos);//buscar todos los salones
-// router.get('/', cache('5 minutes'), salonesControlador.buscarTodos);
+router.get('/', usuariosControlador.buscarTodos);
 router.get('/:usuario_id', usuariosControlador.buscarPorId);
 
 router.put('/:usuario_id',

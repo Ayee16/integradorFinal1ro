@@ -18,11 +18,11 @@ export default class Salones {
 
     modificar = async(salon_id,datos) => {
 
-        const camposAActualizar = Object.keys(datos); //obtengo claves
-        const valoresAActualizar = Object.values(datos); //obtengo valores
-        const setValores = camposAActualizar.map(campo => `${campo} = ?`).join(', '); //junto claves y le agrego ?
-        const parametros = [...valoresAActualizar,salon_id]; //junto valores y salon id y lo meto en const parametros
-        const sql = `UPDATE salones SET ${setValores} WHERE salon_id = ?`; //consulta sql
+        const camposAActualizar = Object.keys(datos);
+        const valoresAActualizar = Object.values(datos);
+        const setValores = camposAActualizar.map(campo => `${campo} = ?`).join(', '); 
+        const parametros = [...valoresAActualizar,salon_id]; 
+        const sql = `UPDATE salones SET ${setValores} WHERE salon_id = ?`; 
         const [result] = await conexion.execute(sql,parametros);
         if (result.affectedRows ===0){
             return null;
@@ -35,7 +35,7 @@ export default class Salones {
             const sql = 'INSERT INTO salones (titulo, direccion, capacidad, importe) VALUES (?,?,?,?)' ;
             const [result] = await conexion.execute(sql,[titulo, direccion, capacidad, importe]);
             if (result.affectedRows == 0){
-                return null //en capa de datos no se retorna informacion solo retorna datos puros
+                return null 
             }
             return this.buscarPorId(result.insertId);
         }
@@ -46,6 +46,6 @@ export default class Salones {
         if (result.affectedRows === 0) {
             return null;
         }
-        return true; // o podrías retornar el salon_id eliminado
+        return true; 
     }
 }

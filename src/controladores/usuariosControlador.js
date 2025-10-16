@@ -111,7 +111,6 @@ export default class UsuariosControlador{
         }
     }
 
-
     crear = async (req, res) => {
         try {
             const {nombre, apellido, nombre_usuario, tipo_usuario, contrasenia,celular} = req.body;
@@ -149,8 +148,30 @@ export default class UsuariosControlador{
     }
     
     eliminar = async (req, res) => {
+        try {
+            const usuario_id = req.params.usuario_id;
+            const usuarioEliminado = await this.UsuarioServicio.eliminar(usuario_id);
+            
+            if (!usuarioEliminado) {
+                return res.status(404).json({
+                    estado: false,
+                    mensaje: 'Usuario no encontrado para eliminar'
+                });
+            }
+            
+            res.json({
+                estado: true,
+                mensaje: 'Usuario eliminado',
+                usuario: usuarioEliminado
+            });
 
+        } catch(err) {
+            console.log('Error en DELETE /usuarios/:usuario_id', err);
+            res.status(500).json({
+                estado: false,
+                mensaje: 'Error interno del servidor'
+            });
+        }
     }
-
 
 }
