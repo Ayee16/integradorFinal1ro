@@ -18,8 +18,17 @@ export default class Usuarios {
         return usuario[0];
     }
 
-    modificar =async(req,res) =>{
-        
+    modificar =async(usuario_id,datos) =>{
+      const camposAActualizar = Object.keys(datos); //obtengo claves
+        const valoresAActualizar = Object.values(datos); //obtengo valores
+        const setValores = camposAActualizar.map(campo => `${campo} = ?`).join(', '); //junto claves y le agrego ?
+        const parametros = [...valoresAActualizar,usuario_id]; //junto valores y salon id y lo meto en const parametros
+        const sql = `UPDATE usuarios SET ${setValores} WHERE usuario_id = ?`; //consulta sql
+        const [result] = await conexion.execute(sql,parametros);
+        if (result.affectedRows ===0){
+            return null;
+        }
+        return this.buscarPorId(usuario_id); 
     };
 
     crear = async(usuario) =>{
