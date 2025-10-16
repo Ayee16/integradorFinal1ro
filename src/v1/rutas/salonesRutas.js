@@ -10,7 +10,14 @@ router.get('/', salonesControlador.buscarTodos);
 
 router.get('/:salon_id', salonesControlador.buscarPorId);
 
-router.put('/:salon_id', salonesControlador.modificar);
+router.put('/:salon_id', 
+    [
+        check('titulo', 'El titulo es necesario').notEmpty(),
+        check('direccion', 'La dirección es necesaria.').notEmpty(),
+        check('capacidad', 'La capacidad debe ser un número entero mayor a 0').isInt({ min: 1 }),
+        check('importe', 'El importe debe ser un número decimal mayor o igual a 0').isFloat({ min: 0 }),
+        validarCampos
+    ],salonesControlador.modificar);
 
 router.post('/', 
     [

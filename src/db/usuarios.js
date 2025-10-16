@@ -19,7 +19,7 @@ export default class Usuarios {
     }
 
     modificar =async(usuario_id,datos) =>{
-      const camposAActualizar = Object.keys(datos); 
+        const camposAActualizar = Object.keys(datos); 
         const valoresAActualizar = Object.values(datos); 
         const setValores = camposAActualizar.map(campo => `${campo} = ?`).join(', '); 
         const parametros = [...valoresAActualizar,usuario_id]; 
