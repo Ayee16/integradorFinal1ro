@@ -3,7 +3,7 @@ import { conexion } from "./conexion.js";
 export default class Usuarios {
 
     buscarTodos =async(req,res) =>{
-        const sql = 'SELECT * FROM usuarios WHERE activo = 1';      
+        const sql = 'SELECT usuario_id,nombre,apellido,nombre_usuario,tipo_usuario FROM usuarios WHERE activo = 1';      
         const [usuarios] = await conexion.execute(sql);
         return usuarios;
 
