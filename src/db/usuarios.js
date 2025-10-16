@@ -41,7 +41,12 @@ export default class Usuarios {
             return this.buscarPorId(result.insertId);
         }
 
-    eliminar =async(req,res) =>{
-        
+    eliminar = async(usuario_id) => {
+        const sql = 'UPDATE usuarios SET activo = 0 WHERE usuario_id = ?';
+        const [result] = await conexion.execute(sql, [usuario_id]);
+        if (result.affectedRows == 0) {
+            return null;
+        }
+        return true;
     };
 }
