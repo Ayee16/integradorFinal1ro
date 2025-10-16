@@ -18,8 +18,8 @@ router.post('/',
     [
         check('titulo', 'El titulo es necesario').notEmpty(),
         check('direccion', 'La dirección es necesaria.').notEmpty(),
-        check('capacidad', 'La capacidad es necesaria.').notEmpty(), // ver cómo verificar que sea numérico
-        check('importe', 'El importe es necesario.').notEmpty(),  // ver cómo verificar que sea numérico
+        check('capacidad', 'La capacidad debe ser un número entero mayor a 0').isInt({ min: 1 }),
+        check('importe', 'El importe debe ser un número decimal mayor o igual a 0').isFloat({ min: 0 }),
         validarCampos
     ],
     

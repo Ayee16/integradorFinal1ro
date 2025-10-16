@@ -32,9 +32,9 @@ export default class Usuarios {
     };
 
     crear = async(usuario) =>{
-            const {nombre, apellido, nombre_usuario, tipo_usuario, contrasenia} = usuario;
-            const sql = 'INSERT INTO usuarios (nombre, apellido, nombre_usuario, tipo_usuario, contrasenia) VALUES (?,?,?,?,?)' ;
-            const [result] = await conexion.execute(sql,[nombre, apellido, nombre_usuario, tipo_usuario, contrasenia]);
+            const {nombre, apellido, nombre_usuario, tipo_usuario, contrasenia,celular} = usuario;
+            const sql = 'INSERT INTO usuarios (nombre, apellido, nombre_usuario, tipo_usuario, contrasenia,celular) VALUES (?,?,?,?,?,?)' ;
+            const [result] = await conexion.execute(sql,[nombre, apellido, nombre_usuario, tipo_usuario, contrasenia,celular]);
             if (result.affectedRows == 0){
                 return null //en capa de datos no se retorna informacion solo retorna datos puros
             }

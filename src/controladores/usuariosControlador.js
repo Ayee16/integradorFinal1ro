@@ -82,7 +82,8 @@ export default class UsuariosControlador{
                             'apellido',
                             'nombre_usuario',
                             'contrasenia',
-                            'tipo_usuario'
+                            'tipo_usuario',
+                            'celular'
                         ]
                     });
                 }
@@ -113,13 +114,14 @@ export default class UsuariosControlador{
 
     crear = async (req, res) => {
         try {
-            const {nombre, apellido, nombre_usuario, tipo_usuario, contrasenia} = req.body;
+            const {nombre, apellido, nombre_usuario, tipo_usuario, contrasenia,celular} = req.body;
             const usuario =  {
                 nombre, 
                 apellido, 
                 nombre_usuario, 
                 tipo_usuario,
-                contrasenia
+                contrasenia,
+                celular
             }   
 
             const nuevoUsuario = await this.UsuarioServicio.crear(usuario);
