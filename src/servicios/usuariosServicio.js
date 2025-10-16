@@ -10,16 +10,21 @@ export default class UsuariosServicio {
         return this.usuarios.buscarTodos();
     }
 
-    buscarPorId = (salon_id) => {
-
+    buscarPorId = (usuario_id) => {
+        return this.usuarios.buscarPorId(usuario_id);
     }
 
-    modificar = (salon_id,datos) => {
-
+    modificar = (usuario_id,datos) => {
+        const existe = this.usuarios.buscarPorId(usuario_id);
+        if (!existe) {
+            return { error: 'Usuario no encontrado' }; //cambiar a null
+        }
+        return this.usuarios.modificar(usuario_id,datos);
     }
 
-    crear = (salon) => {
 
+    crear = (usuario) => {
+        return this.usuarios.crear(usuario);
     }
 
     eliminar = async (salon_id) =>{
