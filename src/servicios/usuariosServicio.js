@@ -22,7 +22,6 @@ export default class UsuariosServicio {
         return this.usuarios.modificar(usuario_id,datos);
     }
 
-
     crear = (usuario) => {
         return this.usuarios.crear(usuario);
     }
