@@ -7,4 +7,12 @@ export default class Turnos {
         return turnos; //retorno consulta
     }
 
+    buscarPorId = async (turno_id) => {
+        const sql = `SELECT turno_id, orden, activo, CONCAT(t.hora_desde, '-', t.hora_hasta) as horario
+                        FROM turnos AS t
+                        WHERE t.turno_id = ? AND t.activo = 1;`
+        const [result] = await conexion.execute(sql, [turno_id]);
+        return result[0];
+    }
+
 }
