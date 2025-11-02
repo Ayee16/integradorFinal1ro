@@ -7,13 +7,13 @@ export default class Salones {
         return salones;
     }
 
-    buscarPorId = async(salon_id) =>{
-        const sql = 'SELECT * FROM salones WHERE activo = 1 AND salon_id = ?';
-        const [salon] = await conexion.execute(sql, [salon_id]);
-        if (salon.length === '0'){
-            return null
-        }
-        return salon[0];
+
+    buscarPorId = async (salon_id) => {
+        const sql = `SELECT titulo, direccion, capacidad, importe, activo
+                        FROM salones AS s
+                        WHERE s.salon_id = ? AND s.activo = 1;`
+        const [result] = await conexion.execute(sql, [salon_id]);
+        return result[0];
     }
 
     modificar = async(salon_id,datos) => {

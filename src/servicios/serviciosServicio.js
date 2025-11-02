@@ -9,4 +9,8 @@ export default class ServiciosServicio{
     buscarTodos = () => {
         return this.servicios.buscarTodos();
     }
+
+    buscarPorId = (servicio_id) => {
+        return this.servicios.buscarPorId(servicio_id);
+    }
 }

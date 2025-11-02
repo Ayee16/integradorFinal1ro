@@ -8,6 +8,24 @@ export default class Servicios{
         return servicios;
     }
 
+    // buscarPorId = async(servicio_id) =>{
+    //     const sql = 'SELECT * FROM servicios WHERE activo = 1 AND servicio_id = ?';
+    //     const [servicio] = await conexion.execute(sql, [servicio_id])
+    //     if (servicio.length === '0'){
+    //         return null
+    //     }
+    //     return servicio[0];
+
+    // }
+
+    buscarPorId = async (servicio_id) => {
+        const sql = `SELECT servicio_id, descripcion, importe, activo 
+                        FROM servicios AS s
+                        WHERE s.servicio_id = ? AND s.activo = 1;`
+        const [result] = await conexion.execute(sql, [servicio_id]);
+        return result[0];
+    }
+
 };
 
 

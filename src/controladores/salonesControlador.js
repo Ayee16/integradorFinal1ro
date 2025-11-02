@@ -43,7 +43,7 @@ export default class SalonesControlador{
             console.log('Error en GET /salones/salon_id', error)
             res.status(500).json({
                 estado: false,
-                mensaje: 'Error interno del servidor'
+                mensaje: 'error interno del servidor'
             })
         }
     }

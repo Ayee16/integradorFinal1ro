@@ -1,0 +1,16 @@
+meta {
+  name: turnos
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{apiUrl}}/api/v1/turnos
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

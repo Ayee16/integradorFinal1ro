@@ -26,7 +26,8 @@ export default class UsuariosControlador{
 
     buscarPorId = async(req,res) => {
         try{
-            const usuario_id = req.params.usuario_id;
+            // const usuario_id = req.params.usuario_id;
+            const { usuario_id } = req.params;
             const usuario = await this.UsuarioServicio.buscarPorId(usuario_id);
             
             if (!usuario){

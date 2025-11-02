@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/', turnosControlador.buscarTodos);
 
-
+router.get('/:turno_id', turnosControlador.buscarPorId);
 
 
 export {router} ;

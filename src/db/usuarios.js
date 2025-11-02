@@ -9,13 +9,12 @@ export default class Usuarios {
 
     };
 
-    buscarPorId = async(usuario_id) =>{
-        const sql = 'SELECT * FROM usuarios WHERE activo = 1 AND usuario_id = ?';
-        const [usuario] = await conexion.execute(sql, [usuario_id]);
-        if (usuario.length === '0'){
-            return null
-        }
-        return usuario[0];
+    buscarPorId = async (usuario_id) => {
+        const sql = `SELECT CONCAT(u.nombre, ' ', u.apellido) as usuario, u.tipo_usuario, u.usuario_id
+                        FROM usuarios AS u
+                        WHERE u.usuario_id = ? AND u.activo = 1;`
+        const [result] = await conexion.execute(sql, [usuario_id]);
+        return result[0];
     }
 
     modificar =async(usuario_id,datos) =>{
