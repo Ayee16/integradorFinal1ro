@@ -21,4 +21,6 @@ router.post('/',
     
     turnosControlador.crear);
 
+router.delete('/:turno_id', turnosControlador.eliminar);
+
 export {router} ;

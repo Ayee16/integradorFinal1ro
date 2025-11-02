@@ -20,4 +20,7 @@ router.post('/',
     
     serviciosControlador.crear);
 
+router.delete('/:servicio_id', serviciosControlador.eliminar);
+
+
 export {router};
