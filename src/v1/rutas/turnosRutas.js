@@ -10,5 +10,6 @@ router.get('/', turnosControlador.buscarTodos);
 
 router.get('/:turno_id', turnosControlador.buscarPorId);
 
+router.delete('/:turno_id', turnosControlador.eliminar);
 
 export {router} ;

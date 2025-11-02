@@ -10,6 +10,7 @@ router.get('/', serviciosControlador.buscarTodos);
 
 router.get('/:servicio_id', serviciosControlador.buscarPorId);
 
+router.delete('/:servicio_id', serviciosControlador.eliminar);
 
 
 export {router};
