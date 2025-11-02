@@ -47,4 +47,37 @@ export default class ServiciosControlador{
         }
     }
 
+    crear = async (req, res) => {
+        try {
+            const {descripcion, importe, activo} = req.body;
+            const servicio =  {
+                descripcion, 
+                importe,
+                activo,
+            }   
+
+            const nuevoServicio = await this.ServiciosServicio.crear(servicio);
+
+            if (!nuevoServicio) {
+                return res.status(404).json({
+                    estado: false,
+                    mensaje: 'Servicio no creado'
+                })
+            }
+
+            res.json({
+                estado: true, 
+                mensaje: 'Servicio creado!',
+                servicio: nuevoServicio
+            });
+    
+        } catch (err) {
+            console.log('Error en POST /servicios/', err);
+            res.status(500).json({
+                estado: false,
+                mensaje: 'Error interno del servidor.'
+            });
+        }
+    }
+    
 }

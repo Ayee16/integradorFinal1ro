@@ -14,6 +14,10 @@ export default class ServiciosServicio{
         return this.servicios.buscarPorId(servicio_id);
     }
 
+    crear = (servicio) => {
+        return this.servicios.crear(servicio);
+    }
+
     eliminar = async (servicio_id) =>{
     const existe = await this.servicios.buscarPorId(servicio_id);
     if (!existe) {

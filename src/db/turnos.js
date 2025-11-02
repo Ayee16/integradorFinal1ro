@@ -15,4 +15,14 @@ export default class Turnos {
         return result[0];
     }
 
+    crear = async(turno) =>{
+            const {orden, hora_desde, hora_hasta, activo} = turno;
+            const sql = 'INSERT INTO turnos (orden, hora_desde, hora_hasta, activo) VALUES (?,?,?,?)' ;
+            const [result] = await conexion.execute(sql,[orden, hora_desde, hora_hasta, activo]);
+            if (result.affectedRows == 0){
+                return null 
+            }
+            return this.buscarPorId(result.insertId);
+        }
+
 }
