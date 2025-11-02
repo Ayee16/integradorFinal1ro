@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.get('/', serviciosControlador.buscarTodos);
 
+router.get('/:servicio_id', serviciosControlador.buscarPorId);
 
 
 
