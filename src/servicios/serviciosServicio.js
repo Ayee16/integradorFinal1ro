@@ -9,6 +9,10 @@ export default class ServiciosServicio{
     buscarTodos = () => {
         return this.servicios.buscarTodos();
     }
+    
+    buscarPorId = (servicio_id) => {
+        return this.servicios.buscarPorId(servicio_id);
+    }
 
     eliminar = async (servicio_id) =>{
     const existe = await this.servicios.buscarPorId(servicio_id);
