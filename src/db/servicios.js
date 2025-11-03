@@ -25,6 +25,12 @@ export default class Servicios{
             }
             return this.buscarPorId(result.insertId);
         }
+    
+    eliminar = async (servicio_id) => {
+        const sql = 'UPDATE servicios SET activo = 0 WHERE servicio_id = ?';
+        const [result] = await conexion.execute(sql, [servicio_id]);
+        return result.affectedRows > 0;
+    }
 
 };
 

@@ -10,4 +10,12 @@ export default class ReservasServicio {
         return this.reserva.buscarTodos();
     }
 
+    eliminar = async (reserva_id) =>{
+    const existe = await this.reservas.buscarPorId(reserva_id);
+    if (!existe) {
+        return null;
+    }
+    return this.reservas.eliminar(reserva_id);
+    }
+
 }

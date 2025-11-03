@@ -56,6 +56,32 @@ export default class ReservasControlador{
             mensaje: "Error interno del servidor"
         });
     }
+
+    eliminar = async (req, res) => {
+        try {
+            const reserva_id = req.params.reserva_id;
+            const reservaEliminada = await this.reservasServicio.eliminar(reserva_id);
+
+            if (!reservaEliminada) {
+                return res.status(404).json({
+                    estado: false,
+                    mensaje: "Reserva no encontrada"
+                });
+            }
+
+            res.json({
+                estado: true,
+                mensaje: "Reserva eliminada correctamente"
+            });
+
+        } catch (error) {
+            console.error("Error al eliminar la reserva", error);
+            res.status(500).json({
+                estado: false,
+                mensaje: "Error interno del servidor"
+            });
+        }
+    }
 }
 
 }

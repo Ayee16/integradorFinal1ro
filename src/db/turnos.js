@@ -24,5 +24,10 @@ export default class Turnos {
             }
             return this.buscarPorId(result.insertId);
         }
-
+    
+    eliminar = async(turno_id) => {
+        const sql = 'UPDATE turnos SET activo = 0 WHERE turno_id = ?';
+        const [result] = await conexion.execute(sql, [turno_id]);
+        return result.affectedRows > 0;
+    }
 }
