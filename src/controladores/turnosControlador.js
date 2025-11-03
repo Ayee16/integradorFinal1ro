@@ -84,25 +84,28 @@ export default class TurnosControlador {
 
     eliminar = async (req, res) => {
         try {
-            const turno_id = req.params.turno_id;
+            const { turno_id } = req.params;
             const turnoEliminar = await this.TurnosServicio.eliminar(turno_id);
 
-            if (!turnoEliminar) {
-                    return res.status(404).json({
-                        estado: false,
-                        mensaje: 'Turno no encontrado'
-                    });
-                }
-                res.json({
-                    estado: true,
-                    mensaje: 'Servicio eliminado'
-                });
+            const eliminado = turnoEliminar && (turnoEliminar.affectedRows === 1 || turnoEliminar === 1 || turnoEliminar === true);
 
-            } catch (err) {
-                console.log('Error en DELETE /servicios/servicio_id', err);
-                res.status(500).json({
+            if (!eliminado) {
+                return res.status(404).json({
                     estado: false,
-                    mensaje: 'Error interno del servidor'
+                    mensaje: 'Turno no encontrado'
+                });
+            }
+
+            return res.json({
+                estado: true,
+                mensaje: 'Turno eliminado'
+            });
+
+        } catch (err) {
+            console.log('Error en DELETE /turnos/:turno_id', err);
+            res.status(500).json({
+                estado: false,
+                mensaje: 'Error interno del servidor'
             });
         }
     }       
