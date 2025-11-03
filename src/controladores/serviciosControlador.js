@@ -80,4 +80,29 @@ export default class ServiciosControlador{
         }
     }
     
+    eliminar = async (req, res) => {
+        try {
+            const servicio_id = req.params.servicio_id;
+            const servicioEliminado = await this.ServiciosServicio.eliminar(servicio_id);
+            
+            if (!servicioEliminado) {
+                return res.status(404).json({
+                    estado: false,
+                    mensaje: 'Servicio no encontrado'
+                });
+            }
+            
+            res.json({
+                estado: true,
+                mensaje: 'Servicio eliminado'
+            });
+
+        } catch (error) {
+            console.log('Error en DELETE /servicios/servicio_id', error);
+            res.status(500).json({
+                estado: false,
+                mensaje: 'Error interno del servidor'
+            });
+        }
+    }
 }

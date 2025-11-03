@@ -48,7 +48,7 @@ export default class TurnosControlador {
         }
     }
 
-crear = async (req, res) => {
+    crear = async (req, res) => {
         try {
             const {orden, hora_desde, hora_hasta, activo} = req.body;
             const turno =  {
@@ -82,5 +82,28 @@ crear = async (req, res) => {
         }
     }
 
+    eliminar = async (req, res) => {
+        try {
+            const turno_id = req.params.turno_id;
+            const turnoEliminar = await this.TurnosServicio.eliminar(turno_id);
 
+            if (!turnoEliminar) {
+                    return res.status(404).json({
+                        estado: false,
+                        mensaje: 'Turno no encontrado'
+                    });
+                }
+                res.json({
+                    estado: true,
+                    mensaje: 'Servicio eliminado'
+                });
+
+            } catch (err) {
+                console.log('Error en DELETE /servicios/servicio_id', err);
+                res.status(500).json({
+                    estado: false,
+                    mensaje: 'Error interno del servidor'
+            });
+        }
+    }       
 }
