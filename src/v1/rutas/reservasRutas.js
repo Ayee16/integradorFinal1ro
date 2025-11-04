@@ -9,4 +9,6 @@ const router = express.Router();
 
 router.get('/', reservasControlador.buscarTodos);
 
+router.delete('/:reserva_id', reservasControlador.eliminar);
+
 export { router };

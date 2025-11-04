@@ -32,4 +32,10 @@ export default class Reservas {
     return reservas;
     }
 
+    eliminar = async (reserva_id) => {
+        const sql = `UPDATE reservas SET activo = 0 WHERE reserva_id = ?`;
+        const [result] = await conexion.execute(sql, [reserva_id]);
+        return result.affectedRows > 0;
+    }
+
 }
