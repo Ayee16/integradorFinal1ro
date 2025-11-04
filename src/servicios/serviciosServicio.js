@@ -18,12 +18,12 @@ export default class ServiciosServicio{
         return this.servicios.crear(servicio);
     }
 
-    modificar = async (servicio_id) =>{
+    modificar = async (servicio_id, datos) =>{
     const existe = await this.servicios.buscarPorId(servicio_id);
     if (!existe) {
         return null;
     }
-    return this.servicios.modificar(servicio_id);
+    return this.servicios.modificar(servicio_id, datos);
     }
 
     eliminar = async (servicio_id) =>{
