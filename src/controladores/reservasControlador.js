@@ -204,7 +204,7 @@ export default class ReservasControlador{
             res.json({
                 estado: true, 
                 mensaje: 'Reserva creada!',
-                salon: nuevaReserva
+                reserva: nuevaReserva
             });
     
         } catch (err) {

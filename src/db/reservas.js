@@ -54,8 +54,8 @@ export default class Reservas {
         FROM reservas AS r
         INNER JOIN salones AS s ON s.salon_id = r.salon_id
         INNER JOIN turnos AS t ON t.turno_id = r.turno_id
-        INNER JOIN reservas_servicios AS rs ON rs.reserva_id = r.reserva_id
-        INNER JOIN servicios AS sv ON sv.servicio_id = rs.servicio_id
+        LEFT JOIN reservas_servicios AS rs ON rs.reserva_id = r.reserva_id
+        LEFT JOIN servicios AS sv ON sv.servicio_id = rs.servicio_id
         WHERE r.activo = 1 AND r.reserva_id = ?
     `;
     

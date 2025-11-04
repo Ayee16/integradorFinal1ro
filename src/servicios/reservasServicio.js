@@ -57,17 +57,19 @@ export default class ReservasServicio {
 
         const result = await this.reserva.crear(nuevaReserva);
 
-        if (!result) {
+        if (!result || !Array.isArray(result) || result.length === 0) {
             return null;
         }
 
+        const reserva_id = result[0].reserva_id;
+
         // Crear los servicios asociados a la reserva si existen
         if (servicios && Array.isArray(servicios) && servicios.length > 0) {
-            await this.reservas_servicios.crear(result.reserva_id, servicios);
+            await this.reservas_servicios.crear(reserva_id, servicios);
         }
 
         // Buscar la reserva completa con todos sus datos
-        return this.reserva.buscarPorId(result.reserva_id);
+        return this.reserva.buscarPorId(reserva_id);
     }
 
     eliminar = async (reserva_id) =>{
