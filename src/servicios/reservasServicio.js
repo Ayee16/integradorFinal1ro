@@ -10,6 +10,10 @@ export default class ReservasServicio {
         return this.reserva.buscarTodos();
     }
 
+    buscarPorId = (reserva_id) => {
+        return this.reserva.buscarPorId(reserva_id);
+    }
+
     modificar = async (reserva_id, datos) => {
     const existe = await this.reserva.buscarPorId(reserva_id);
 

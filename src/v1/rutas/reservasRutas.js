@@ -8,7 +8,7 @@ const reservasControlador = new ReservasControlador();
 const router = express.Router();
 
 router.get('/', reservasControlador.buscarTodos);
-
+router.get('/:reserva_id', reservasControlador.buscarPorId);
 router.put('/:reserva_id', 
     [
         check('fecha_reserva', 'La fecha de reserva es obligatoria y debe tener formato YYYY-MM-DD').notEmpty().isDate({ format: 'YYYY-MM-DD' }),
