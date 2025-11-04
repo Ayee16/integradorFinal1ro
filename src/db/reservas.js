@@ -66,6 +66,31 @@ export default class Reservas {
     return reserva;
 };
 
+    crear = async(reserva) => {
+        const {
+                fecha_reserva,
+                salon_id,
+                usuario_id,
+                turno_id,
+                foto_cumpleaniero, 
+                tematica,
+                importe_salon,
+                importe_total 
+            } = reserva;
+        
+        const sql = `INSERT INTO reservas 
+            (fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon, importe_total) 
+            VALUES (?,?,?,?,?,?,?,?)`;
+        
+        const [result] = await conexion.execute(sql, 
+            [fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon, importe_total]);
+
+        if (result.affectedRows === 0){
+            return null;
+        }
+
+        return this.buscarPorId(result.insertId);
+        }
 
     modificar = async (reserva_id, datos) => {
     const sql = `
