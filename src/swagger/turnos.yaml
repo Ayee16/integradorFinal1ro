@@ -1,0 +1,375 @@
+paths:
+  /api/v1/turnos:
+    get:
+      summary: Obtiene una lista de todos los turnos
+      tags:
+        - turnos
+      responses:
+        '200':
+          description: Lista de turnos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  datos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        turno_id:
+                          type: integer
+                        orden:
+                          type: integer
+                        hora_desde:
+                          type: string
+                          format: time
+                        hora_hasta:
+                          type: string
+                          format: time
+                        activo:
+                          type: integer
+              example:
+                estado: true
+                datos:
+                  - turno_id: 1
+                    orden: 1
+                    hora_desde: 08:00:00
+                    hora_hasta: 12:00:00
+                    activo: 1
+                  - turno_id: 2
+                    orden: 2
+                    hora_desde: 14:00:00
+                    hora_hasta: 18:00:00
+                    activo: 1
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+    post:
+      summary: Crea un nuevo turno
+      tags:
+        - turnos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - orden
+                - hora_desde
+                - hora_hasta
+                - activo
+              properties:
+                orden:
+                  type: integer
+                  description: Número de orden del turno
+                  example: 1
+                hora_desde:
+                  type: string
+                  format: time
+                  description: Hora de inicio del turno (formato HH:MM:SS)
+                  example: 08:00:00
+                hora_hasta:
+                  type: string
+                  format: time
+                  description: Hora de finalización del turno (formato HH:MM:SS)
+                  example: 12:00:00
+                activo:
+                  type: integer
+                  minimum: 1
+                  description: Estado activo del turno (debe ser 1)
+                  example: 1
+            example:
+              orden: 1
+              hora_desde: 08:00:00
+              hora_hasta: 12:00:00
+              activo: 1
+      responses:
+        '200':
+          description: Turno creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+                  turno:
+                    type: object
+                    properties:
+                      turno_id:
+                        type: integer
+                      orden:
+                        type: integer
+                      activo:
+                        type: integer
+                      horario:
+                        type: string
+                        description: Concatenación de hora_desde y hora_hasta
+              example:
+                estado: true
+                mensaje: Turno creado!
+                turno:
+                  turno_id: 1
+                  orden: 1
+                  activo: 1
+                  horario: 08:00:00-12:00:00
+        '404':
+          description: Turno no creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+  /api/v1/turnos/{turno_id}:
+    get:
+      summary: Obtiene un turno por su ID
+      tags:
+        - turnos
+      parameters:
+        - name: turno_id
+          in: path
+          required: true
+          description: ID del turno a obtener
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Turno encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  salon:
+                    type: object
+                    properties:
+                      turno_id:
+                        type: integer
+                      orden:
+                        type: integer
+                      activo:
+                        type: integer
+                      horario:
+                        type: string
+                        description: Concatenación de hora_desde y hora_hasta
+              example:
+                estado: true
+                salon:
+                  turno_id: 1
+                  orden: 1
+                  activo: 1
+                  horario: 08:00:00-12:00:00
+        '404':
+          description: Turno no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+    put:
+      summary: Modifica un turno existente
+      tags:
+        - turnos
+      parameters:
+        - name: turno_id
+          in: path
+          required: true
+          description: ID del turno a modificar
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - orden
+                - hora_desde
+                - hora_hasta
+                - activo
+              properties:
+                orden:
+                  type: integer
+                  description: Número de orden del turno
+                  example: 1
+                hora_desde:
+                  type: string
+                  format: time
+                  description: Hora de inicio del turno (formato HH:MM:SS)
+                  example: 08:00:00
+                hora_hasta:
+                  type: string
+                  format: time
+                  description: Hora de finalización del turno (formato HH:MM:SS)
+                  example: 12:00:00
+                activo:
+                  type: integer
+                  minimum: 0
+                  maximum: 1
+                  description: Estado activo del turno (0 o 1)
+                  example: 1
+            example:
+              orden: 1
+              hora_desde: 08:00:00
+              hora_hasta: 12:00:00
+              activo: 1
+      responses:
+        '200':
+          description: Turno modificado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+                  turno:
+                    type: object
+                    properties:
+                      turno_id:
+                        type: integer
+                      orden:
+                        type: integer
+                      activo:
+                        type: integer
+                      horario:
+                        type: string
+              example:
+                estado: true
+                mensaje: Turno modificado correctamente
+                turno:
+                  turno_id: 1
+                  orden: 1
+                  activo: 1
+                  horario: 08:00:00-12:00:00
+        '400':
+          description: No se proporcionaron datos para modificar
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '404':
+          description: Turno no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+    delete:
+      summary: Elimina un turno (marca como inactivo)
+      tags:
+        - turnos
+      parameters:
+        - name: turno_id
+          in: path
+          required: true
+          description: ID del turno a eliminar
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Turno eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+              example:
+                estado: true
+                mensaje: Turno eliminado
+        '404':
+          description: Turno no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+

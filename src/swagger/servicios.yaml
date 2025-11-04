@@ -1,0 +1,348 @@
+paths:
+  /api/v1/servicios:
+    get:
+      summary: Obtiene una lista de todos los servicios
+      tags:
+        - servicios
+      responses:
+        '200':
+          description: Lista de servicios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  datos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        servicio_id:
+                          type: integer
+                        descripcion:
+                          type: string
+                        importe:
+                          type: number
+                          format: float
+                        activo:
+                          type: integer
+              example:
+                estado: true
+                datos:
+                  - servicio_id: 1
+                    descripcion: Servicio de catering
+                    importe: 15000.00
+                    activo: 1
+                  - servicio_id: 2
+                    descripcion: Servicio de fotografía
+                    importe: 8000.00
+                    activo: 1
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+    post:
+      summary: Crea un nuevo servicio
+      tags:
+        - servicios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - descripcion
+                - importe
+                - activo
+              properties:
+                descripcion:
+                  type: string
+                  description: Descripción del servicio
+                  example: Servicio de catering
+                importe:
+                  type: number
+                  format: float
+                  minimum: 0
+                  description: Importe del servicio (debe ser mayor o igual a 0)
+                  example: 15000.00
+                activo:
+                  type: integer
+                  minimum: 1
+                  description: Estado activo del servicio (debe ser 1)
+                  example: 1
+            example:
+              descripcion: Servicio de catering
+              importe: 15000.00
+              activo: 1
+      responses:
+        '200':
+          description: Servicio creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+                  servicio:
+                    type: object
+                    properties:
+                      servicio_id:
+                        type: integer
+                      descripcion:
+                        type: string
+                      importe:
+                        type: number
+                        format: float
+                      activo:
+                        type: integer
+              example:
+                estado: true
+                mensaje: Servicio creado!
+                servicio:
+                  servicio_id: 1
+                  descripcion: Servicio de catering
+                  importe: 15000.00
+                  activo: 1
+        '404':
+          description: Servicio no creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+  /api/v1/servicios/{servicio_id}:
+    get:
+      summary: Obtiene un servicio por su ID
+      tags:
+        - servicios
+      parameters:
+        - name: servicio_id
+          in: path
+          required: true
+          description: ID del servicio a obtener
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Servicio encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  servicio:
+                    type: object
+                    properties:
+                      servicio_id:
+                        type: integer
+                      descripcion:
+                        type: string
+                      importe:
+                        type: number
+                        format: float
+                      activo:
+                        type: integer
+              example:
+                estado: true
+                servicio:
+                  servicio_id: 1
+                  descripcion: Servicio de catering
+                  importe: 15000.00
+                  activo: 1
+        '404':
+          description: Servicio no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+    put:
+      summary: Modifica un servicio existente
+      tags:
+        - servicios
+      parameters:
+        - name: servicio_id
+          in: path
+          required: true
+          description: ID del servicio a modificar
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - descripcion
+                - importe
+                - activo
+              properties:
+                descripcion:
+                  type: string
+                  description: Descripción del servicio
+                  example: Servicio de catering actualizado
+                importe:
+                  type: number
+                  format: float
+                  minimum: 0
+                  description: Importe del servicio (debe ser mayor o igual a 0)
+                  example: 18000.00
+                activo:
+                  type: integer
+                  minimum: 0
+                  maximum: 1
+                  description: Estado activo del servicio (0 o 1)
+                  example: 1
+            example:
+              descripcion: Servicio de catering actualizado
+              importe: 18000.00
+              activo: 1
+      responses:
+        '200':
+          description: Servicio modificado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+                  servicio:
+                    type: object
+                    properties:
+                      servicio_id:
+                        type: integer
+                      descripcion:
+                        type: string
+                      importe:
+                        type: number
+                        format: float
+                      activo:
+                        type: integer
+              example:
+                estado: true
+                mensaje: Servicio modificado
+                servicio:
+                  servicio_id: 1
+                  descripcion: Servicio de catering actualizado
+                  importe: 18000.00
+                  activo: 1
+        '404':
+          description: Servicio no encontrado para ser modificado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+    delete:
+      summary: Elimina un servicio (marca como inactivo)
+      tags:
+        - servicios
+      parameters:
+        - name: servicio_id
+          in: path
+          required: true
+          description: ID del servicio a eliminar
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Servicio eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+              example:
+                estado: true
+                mensaje: Servicio eliminado
+        '404':
+          description: Servicio no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+
