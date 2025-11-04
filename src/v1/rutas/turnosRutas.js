@@ -21,6 +21,17 @@ router.post('/',
     
     turnosControlador.crear);
 
+router.put('/:turno_id',
+    [
+        check('orden', 'El número de orden es necesario.').notEmpty(),
+        check('hora_desde', 'La hora inicial es necesaria.').notEmpty(),
+        check('hora_hasta', 'La hora de finalización es necesaria.').notEmpty(),
+        check('activo', 'El campo activo debe ser 1 o 0.').isInt({ min: 0, max: 1 }),
+        validarCampos
+    ],
+    turnosControlador.modificar
+);
+
 router.delete('/:turno_id', turnosControlador.eliminar);
 
 export {router} ;

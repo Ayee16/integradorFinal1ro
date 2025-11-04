@@ -79,6 +79,35 @@ export default class ServiciosControlador{
             });
         }
     }
+
+    modificar = async (req, res) => {
+        try {
+            const servicio_id = req.params.servicio_id;
+            const datos = req.body;
+
+            // llamar al método modificar de la instancia
+            const servicioModificado = await this.ServiciosServicio.modificar(servicio_id, datos);
+
+            if (!servicioModificado) {
+                return res.status(404).json({
+                    estado: false,
+                    mensaje: 'servicio no encontrado para ser modificado'
+                });
+            }
+
+            res.json({
+                estado: true,
+                mensaje: 'Servicio modificado',
+                servicio: servicioModificado
+            });
+        } catch (error) {
+            console.log('Error en PUT /servicios/:servicio_id', error);
+            res.status(500).json({
+                estado: false,
+                mensaje: 'Error interno del servidor'
+            });
+        }   
+    }
     
     eliminar = async (req, res) => {
         try {

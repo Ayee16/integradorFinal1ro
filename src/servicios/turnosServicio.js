@@ -18,6 +18,14 @@ export default class TurnosServicio{
         return this.turnos.crear(turno);
     }
 
+    modificar = async (turno_id) =>{
+    const existe = await this.turnos.buscarPorId(turno_id);
+    if (!existe) {
+        return null;
+    }
+    return this.turnos.modificar(turno_id);
+    }
+
     eliminar = async (turno_id) =>{
     const existe = await this.turnos.buscarPorId(turno_id);
     if (!existe) {

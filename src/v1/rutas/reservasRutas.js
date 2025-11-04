@@ -9,6 +9,14 @@ const router = express.Router();
 
 router.get('/', reservasControlador.buscarTodos);
 
+router.put('/:reserva_id', 
+    [
+        check('fecha_reserva', 'La fecha de reserva es obligatoria y debe tener formato YYYY-MM-DD').notEmpty().isDate({ format: 'YYYY-MM-DD' }),
+        check('turno_id', 'El turno_id es obligatorio y debe ser un número entero').notEmpty().isInt(),
+        check('activo', 'El campo activo debe ser 0 o 1').optional().isInt({ min: 0, max: 1 }),
+        validarCampos
+    ],reservasControlador.modificar);
+
 router.delete('/:reserva_id', reservasControlador.eliminar);
 
 export { router };

@@ -58,6 +58,36 @@ export default class ReservasControlador{
         }
     }
 
+
+    modificar = async (req, res) => {
+    try {
+        const reserva_id = req.params.reserva_id;
+        const datosReserva = req.body;
+
+        const reservaModificada = await this.reservasServicio.modificar(reserva_id, datosReserva);
+
+        if (!reservaModificada) {
+            return res.status(404).json({
+                estado: false,
+                mensaje: "Reserva no encontrada"
+            });
+        }
+
+        res.json({
+            estado: true,
+            mensaje: "Reserva modificada correctamente",
+            reserva: reservaModificada
+        });
+
+    } catch (error) {
+        console.error("Error al modificar la reserva", error);
+        res.status(500).json({
+            estado: false,
+            mensaje: "Error interno del servidor"
+        });
+    }
+}
+
     eliminar = async (req, res) => {
         try {
             const reserva_id = req.params.reserva_id;

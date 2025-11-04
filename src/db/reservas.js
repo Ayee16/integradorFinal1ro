@@ -32,6 +32,25 @@ export default class Reservas {
     return reservas;
     }
 
+    modificar = async (reserva_id, datos) => {
+    const sql = `
+        UPDATE reservas 
+        SET 
+            fecha_reserva = ?, 
+            turno_id = ?, 
+            activo = ?
+        WHERE reserva_id = ?
+    `;
+
+    const [resultado] = await conexion.execute(sql, [
+        datos.fecha_reserva,
+        datos.turno_id,
+        datos.activo ?? 1,
+        reserva_id
+    ]);
+    return resultado.affectedRows > 0;
+    }
+
     eliminar = async (reserva_id) => {
         const sql = `UPDATE reservas SET activo = 0 WHERE reserva_id = ?`;
         const [result] = await conexion.execute(sql, [reserva_id]);
