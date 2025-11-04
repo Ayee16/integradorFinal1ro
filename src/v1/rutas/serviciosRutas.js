@@ -20,14 +20,14 @@ router.post('/',
     
     serviciosControlador.crear);
 
-// router.put('/:servicio_id', 
-//     [
-//         check('descripcion', 'La descripción es necesaria').notEmpty(),
-//         check('importe', 'El importe debe ser un número decimal mayor o igual a 0').isFloat({ min: 0 }),
-//         check('activo', 'El campo activo debe ser 0 o 1').isInt({ min: 0, max: 1 }),
-//         validarCampos
-//     ],serviciosControlador.modificar);
-router.put('/:servicio_id', serviciosControlador.modificar);
+router.put('/:servicio_id', 
+    [
+        check('descripcion', 'La descripción es necesaria').notEmpty(),
+        check('importe', 'El importe debe ser un número decimal mayor o igual a 0').isFloat({ min: 0 }),
+        check('activo', 'El campo activo debe ser 0 o 1').isInt({ min: 0, max: 1 }),
+        validarCampos
+    ],serviciosControlador.modificar);
+    
 router.delete('/:servicio_id', serviciosControlador.eliminar);
 
 

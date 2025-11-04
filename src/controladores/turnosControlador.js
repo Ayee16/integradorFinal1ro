@@ -87,6 +87,13 @@ export default class TurnosControlador {
         const turno_id = req.params.turno_id;
         const datosTurno = req.body;
 
+        if (!datosTurno || Object.keys(datosTurno).length === 0) {
+            return res.status(400).json({
+                estado: false,
+                mensaje: 'No se proporcionaron datos para modificar'
+            });
+        }
+
         const turnoModificado = await this.TurnosServicio.modificar(turno_id, datosTurno);
 
         if (!turnoModificado) {
