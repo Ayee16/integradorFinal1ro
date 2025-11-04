@@ -6,6 +6,9 @@ import { validarCampos } from '../../middlewares/validarCampos.js';
 const salonesControlador = new SalonesControlador();
 const router = express.Router();
 
+
+
+
 router.get('/', salonesControlador.buscarTodos);
 
 router.get('/:salon_id', salonesControlador.buscarPorId);
