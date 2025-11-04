@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.get('/', reservasControlador.buscarTodos);
 
+router.get('/:reserva_id', reservasControlador.buscarPorId);
+
 router.delete('/:reserva_id', reservasControlador.eliminar);
 
 export { router };
