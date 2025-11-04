@@ -26,6 +26,29 @@ export default class Servicios{
             return this.buscarPorId(result.insertId);
         }
     
+    modificar = async (servicio_id, datos) => {
+    const sql = `
+        UPDATE servicios 
+        SET 
+            descripcion = ?, 
+            importe = ?, 
+            activo = ?
+        WHERE servicio_id = ?
+    `;
+
+    const [resultado] = await conexion.execute(sql, [
+        datos.descripcion,
+        datos.importe,
+        datos.activo ?? 1,
+        servicio_id
+    ]);
+    if (resultado.affectedRows === 0) { //si no modifica fila, devuelve false
+        return null;
+    }
+
+    return this.buscarPorId(servicio_id);
+}
+
     eliminar = async (servicio_id) => {
         const sql = 'UPDATE servicios SET activo = 0 WHERE servicio_id = ?';
         const [result] = await conexion.execute(sql, [servicio_id]);

@@ -58,7 +58,7 @@ export default class SalonesControlador{
             if (!salonModificado){
                     return res.status(404).json({
                         estado: false,
-                        mensaje: 'salon no encontrado para ser modificado'
+                        mensaje: 'salon no encontrado'
                     })
             }
 

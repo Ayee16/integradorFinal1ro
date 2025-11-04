@@ -82,6 +82,35 @@ export default class TurnosControlador {
         }
     }
 
+    modificar = async (req, res) => {
+    try {
+        const turno_id = req.params.turno_id;
+        const datosTurno = req.body;
+
+        const turnoModificado = await this.TurnosServicio.modificar(turno_id, datosTurno);
+
+        if (!turnoModificado) {
+            return res.status(404).json({
+                estado: false,
+                mensaje: 'Turno no encontrado'
+            });
+        }
+
+        res.json({
+            estado: true,
+            mensaje: 'Turno modificado correctamente',
+            turno: turnoModificado
+        });
+
+    } catch (error) {
+        console.error('Error en PUT /turnos/:turnos_id', error);
+        res.status(500).json({
+            estado: false,
+            mensaje: 'Error interno del servidor'
+        });
+    }
+}
+
     eliminar = async (req, res) => {
         try {
             const { turno_id } = req.params;
