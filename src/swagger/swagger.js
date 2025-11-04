@@ -7,7 +7,7 @@ const swaggerOptions = {
         info: {
             title: 'Reservas de Salones de Cumpleaños',
             version: '1.0.0',
-            description: 'Api del Grupo F de la clase de Prog III',
+            description: 'Grupo F - Programación III',
         },
         servers: [
             {
