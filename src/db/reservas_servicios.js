@@ -15,4 +15,9 @@ export default class ReservasServicios {
         }
     }
 
+    eliminarPorReserva = async (reserva_id) => {
+        const sql = "DELETE FROM reservas_servicios WHERE reserva_id = ?";
+        await conexion.execute(sql, [reserva_id]);
+    }
+
 }

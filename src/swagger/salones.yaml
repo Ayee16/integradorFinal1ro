@@ -50,7 +50,7 @@ paths:
                       activo: 1
                       creado: 2025-08-19T21:51:22.000Z
                       modificado: 2025-08-19T21:51:22.000Z
-                    - salon_id: 2
+                    - salon_id: 1
                       titulo: Secundario
                       direccion: San Lorenzo 1000
                       capacidad: 70

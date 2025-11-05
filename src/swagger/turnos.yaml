@@ -39,7 +39,7 @@ paths:
                     hora_desde: 08:00:00
                     hora_hasta: 12:00:00
                     activo: 1
-                  - turno_id: 2
+                  - turno_id: 1
                     orden: 2
                     hora_desde: 14:00:00
                     hora_hasta: 18:00:00

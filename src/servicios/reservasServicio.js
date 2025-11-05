@@ -24,10 +24,10 @@ export default class ReservasServicio {
         return null;
     }
 
-    // const modificada = await this.reserva.modificar(reserva_id, datos);
-    // if (!modificada) {
-    //     return null;
-    // }
+    const modificada = await this.reserva.modificar(reserva_id, datos);
+    if (!modificada) {
+        return null;
+    }
     return this.reserva.buscarPorId(reserva_id);
 }
 
@@ -73,11 +73,11 @@ export default class ReservasServicio {
     }
 
     eliminar = async (reserva_id) =>{
-    const existe = await this.reservas.buscarPorId(reserva_id);
+    const existe = await this.reserva.buscarPorId(reserva_id);
     if (!existe) {
         return null;
     }
-    return this.reservas.eliminar(reserva_id);
+    return this.reserva.eliminar(reserva_id);
     }
 
 }
