@@ -54,8 +54,8 @@ export default class Reservas {
         FROM reservas AS r
         INNER JOIN salones AS s ON s.salon_id = r.salon_id
         INNER JOIN turnos AS t ON t.turno_id = r.turno_id
-        INNER JOIN reservas_servicios AS rs ON rs.reserva_id = r.reserva_id
-        INNER JOIN servicios AS sv ON sv.servicio_id = rs.servicio_id
+        LEFT JOIN reservas_servicios AS rs ON rs.reserva_id = r.reserva_id
+        LEFT JOIN servicios AS sv ON sv.servicio_id = rs.servicio_id
         WHERE r.activo = 1 AND r.reserva_id = ?
     `;
     
@@ -66,6 +66,31 @@ export default class Reservas {
     return reserva;
 };
 
+    crear = async(reserva) => {
+        const {
+                fecha_reserva,
+                salon_id,
+                usuario_id,
+                turno_id,
+                foto_cumpleaniero, 
+                tematica,
+                importe_salon,
+                importe_total 
+            } = reserva;
+        
+        const sql = `INSERT INTO reservas 
+            (fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon, importe_total) 
+            VALUES (?,?,?,?,?,?,?,?)`;
+        
+        const [result] = await conexion.execute(sql, 
+            [fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon, importe_total]);
+
+        if (result.affectedRows === 0){
+            return null;
+        }
+
+        return this.buscarPorId(result.insertId);
+        }
 
     modificar = async (reserva_id, datos) => {
     const sql = `
