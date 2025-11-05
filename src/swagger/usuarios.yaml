@@ -37,7 +37,7 @@ paths:
                     apellido: Pérez
                     nombre_usuario: jperez
                     tipo_usuario: 1
-                  - usuario_id: 2
+                  - usuario_id: 1
                     nombre: María
                     apellido: González
                     nombre_usuario: mgonzalez

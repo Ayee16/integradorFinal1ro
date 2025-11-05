@@ -35,7 +35,7 @@ paths:
                     descripcion: Servicio de catering
                     importe: 15000.00
                     activo: 1
-                  - servicio_id: 2
+                  - servicio_id: 1
                     descripcion: Servicio de fotografía
                     importe: 8000.00
                     activo: 1

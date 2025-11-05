@@ -67,25 +67,31 @@ paths:
                 estado: true
                 datos:
                   - reserva_id: 1
-                    fecha_reserva: "2024-12-12T03:00:00.000Z"
-                    tematica: "Bebitofiufiu"
-                    importe_salon: 50000.00
-                    importe_total: 65000.00
+                    fecha_reserva: "2025-10-08T03:00:00.000Z"
+                    tematica: "Plim plim"
+                    importe_salon: null
+                    importe_total: "200000.00"
                     salon_id: 1
                     salon_titulo: "Principal"
                     salon_direccion: "San Lorenzo 1000"
                     salon_capacidad: 200
-                    salon_importe: 95000.00
+                    salon_importe: "95000.00"
                     turno_id: 1
                     hora_desde: "12:00:00"
                     hora_hasta: "14:00:00"
                     servicios:
                       - servicio_id: 1
                         descripcion: "Sonido"
-                        importe: 15000.00
+                        importe: "50000.00"
                       - servicio_id: 2
                         descripcion: "Mesa dulce"
-                        importe: 25000.00
+                        importe: "50000.00"
+                      - servicio_id: 3
+                        descripcion: "Tarjetas de invitación"
+                        importe: "50000.00"
+                      - servicio_id: 4
+                        descripcion: "Mozos"
+                        importe: "50000.00"
         '500':
           description: Error interno del servidor
           content:
@@ -176,9 +182,9 @@ paths:
               usuario_id: 1
               turno_id: 1
               foto_cumpleaniero: "foto.jpg"
-              tematica: "Bebitofiufiu"
+              tematica: "Princesas"
               importe_salon: 50000
-              importe_total: 65000
+              importe_total: 90000
               servicios:
                 - servicio_id: 1
                   importe: 15000
@@ -247,11 +253,11 @@ paths:
                 estado: true
                 mensaje: "Reserva creada!"
                 reserva:
-                  reserva_id: 11
+                  reserva_id: 1
                   fecha_reserva: "2024-12-12T03:00:00.000Z"
-                  tematica: "Bebitofiufiu"
+                  tematica: "Princesas"
                   importe_salon: 50000.00
-                  importe_total: 65000.00
+                  importe_total: 90000.00
                   salon_id: 1
                   salon_titulo: "Principal"
                   salon_direccion: "San Lorenzo 1000"
@@ -361,26 +367,32 @@ paths:
               example:
                 estado: true
                 datos:
-                  reserva_id: 11
-                  fecha_reserva: "2024-12-12T03:00:00.000Z"
-                  tematica: "Bebitofiufiu"
-                  importe_salon: 50000.00
-                  importe_total: 65000.00
+                  reserva_id: 1
+                  fecha_reserva: "2025-10-08T03:00:00.000Z"
+                  tematica: "Plim plim"
+                  importe_salon: null
+                  importe_total: "200000.00"
                   salon_id: 1
                   salon_titulo: "Principal"
                   salon_direccion: "San Lorenzo 1000"
                   salon_capacidad: 200
-                  salon_importe: 95000.00
+                  salon_importe: "95000.00"
                   turno_id: 1
                   hora_desde: "12:00:00"
                   hora_hasta: "14:00:00"
                   servicios:
                     - servicio_id: 1
                       descripcion: "Sonido"
-                      importe: 15000.00
+                      importe: "50000.00"
                     - servicio_id: 2
                       descripcion: "Mesa dulce"
-                      importe: 25000.00
+                      importe: "50000.00"
+                    - servicio_id: 3
+                      descripcion: "Tarjetas de invitación"
+                      importe: "50000.00"
+                    - servicio_id: 4
+                      descripcion: "Mozos"
+                      importe: "50000.00"
         '404':
           description: Reserva no encontrada
           content:
@@ -461,7 +473,7 @@ paths:
                   example: 1
             example:
               fecha_reserva: "2024-12-15"
-              turno_id: 2
+              turno_id: 1
               tematica: "Superhéroes"
               importe_total: 75000.00
       responses:
@@ -527,7 +539,7 @@ paths:
                 estado: true
                 mensaje: "Reserva modificada correctamente"
                 reserva:
-                  reserva_id: 11
+                  reserva_id: 1
                   fecha_reserva: "2024-12-15T03:00:00.000Z"
                   tematica: "Superhéroes"
                   importe_salon: 50000.00
@@ -537,7 +549,7 @@ paths:
                   salon_direccion: "San Lorenzo 1000"
                   salon_capacidad: 200
                   salon_importe: 95000.00
-                  turno_id: 2
+                  turno_id: 1
                   hora_desde: "14:00:00"
                   hora_hasta: "18:00:00"
                   servicios:
