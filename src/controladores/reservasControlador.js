@@ -192,19 +192,53 @@ export default class ReservasControlador{
                 servicios
             };
 
-            const nuevaReserva = await this.reservasServicio.crear(reserva)
+            const nuevaReservaFilas = await this.reservasServicio.crear(reserva)
 
-            if (!nuevaReserva) {
+            if (!nuevaReservaFilas || !Array.isArray(nuevaReservaFilas) || nuevaReservaFilas.length === 0) {
                 return res.status(404).json({
                     estado: false,
                     mensaje: 'Reserva no creada'
                 })
             }
 
+            // Procesar el array de filas en un objeto único con servicios agrupados
+            const datos = [];
+            nuevaReservaFilas.forEach(fila => {
+                let reservaExistente = datos.find(r => r.reserva_id === fila.reserva_id);
+                const servicio = fila.servicio_id ? {
+                    servicio_id: fila.servicio_id,
+                    descripcion: fila.servicio_descripcion,
+                    importe: fila.servicio_importe
+                } : null;
+
+                if (reservaExistente) {
+                    if (servicio) {
+                        reservaExistente.servicios.push(servicio);
+                    }
+                } else {
+                    datos.push({
+                        reserva_id: fila.reserva_id,
+                        fecha_reserva: fila.fecha_reserva,
+                        tematica: fila.tematica,
+                        importe_salon: fila.importe_salon,
+                        importe_total: fila.importe_total,
+                        salon_id: fila.salon_id,
+                        salon_titulo: fila.salon_titulo,
+                        salon_direccion: fila.direccion,
+                        salon_capacidad: fila.capacidad,
+                        salon_importe: fila.salon_importe,
+                        turno_id: fila.turno_id,
+                        hora_desde: fila.hora_desde,
+                        hora_hasta: fila.hora_hasta,
+                        servicios: servicio ? [servicio] : []
+                    });
+                }
+            });
+
             res.json({
                 estado: true, 
                 mensaje: 'Reserva creada!',
-                reserva: nuevaReserva
+                reserva: datos[0]
             });
     
         } catch (err) {
