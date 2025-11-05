@@ -1,0 +1,617 @@
+paths:
+  /api/v1/reservas:
+    get:
+      summary: Obtiene una lista de todas las reservas
+      tags:
+        - reservas
+      responses:
+        '200':
+          description: Lista de reservas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  datos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        reserva_id:
+                          type: integer
+                        fecha_reserva:
+                          type: string
+                          format: date-time
+                        tematica:
+                          type: string
+                        importe_salon:
+                          type: number
+                          format: float
+                        importe_total:
+                          type: number
+                          format: float
+                        salon_id:
+                          type: integer
+                        salon_titulo:
+                          type: string
+                        salon_direccion:
+                          type: string
+                        salon_capacidad:
+                          type: integer
+                        salon_importe:
+                          type: number
+                          format: float
+                        turno_id:
+                          type: integer
+                        hora_desde:
+                          type: string
+                          format: time
+                        hora_hasta:
+                          type: string
+                          format: time
+                        servicios:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              servicio_id:
+                                type: integer
+                              descripcion:
+                                type: string
+                              importe:
+                                type: number
+                                format: float
+              example:
+                estado: true
+                datos:
+                  - reserva_id: 1
+                    fecha_reserva: "2024-12-12T03:00:00.000Z"
+                    tematica: "Bebitofiufiu"
+                    importe_salon: 50000.00
+                    importe_total: 65000.00
+                    salon_id: 1
+                    salon_titulo: "Principal"
+                    salon_direccion: "San Lorenzo 1000"
+                    salon_capacidad: 200
+                    salon_importe: 95000.00
+                    turno_id: 1
+                    hora_desde: "12:00:00"
+                    hora_hasta: "14:00:00"
+                    servicios:
+                      - servicio_id: 1
+                        descripcion: "Sonido"
+                        importe: 15000.00
+                      - servicio_id: 2
+                        descripcion: "Mesa dulce"
+                        importe: 25000.00
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+    post:
+      summary: Crea una nueva reserva
+      tags:
+        - reservas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fecha_reserva
+                - salon_id
+                - usuario_id
+                - turno_id
+                - servicios
+              properties:
+                fecha_reserva:
+                  type: string
+                  format: date
+                  description: Fecha de la reserva (formato YYYY-MM-DD)
+                  example: "2024-12-12"
+                salon_id:
+                  type: integer
+                  description: ID del salón
+                  example: 1
+                usuario_id:
+                  type: integer
+                  description: ID del usuario
+                  example: 1
+                turno_id:
+                  type: integer
+                  description: ID del turno
+                  example: 1
+                foto_cumpleaniero:
+                  type: string
+                  description: Nombre del archivo de foto del cumpleañero
+                  example: "foto.jpg"
+                tematica:
+                  type: string
+                  description: Temática de la fiesta
+                  example: "Bebitofiufiu"
+                importe_salon:
+                  type: number
+                  format: float
+                  minimum: 0
+                  description: Importe del salón
+                  example: 50000.00
+                importe_total:
+                  type: number
+                  format: float
+                  minimum: 0
+                  description: Importe total de la reserva
+                  example: 65000.00
+                servicios:
+                  type: array
+                  description: Array de servicios asociados a la reserva
+                  items:
+                    type: object
+                    required:
+                      - servicio_id
+                      - importe
+                    properties:
+                      servicio_id:
+                        type: integer
+                        description: ID del servicio
+                        example: 1
+                      importe:
+                        type: number
+                        format: float
+                        minimum: 0
+                        description: Importe del servicio
+                        example: 15000.00
+            example:
+              fecha_reserva: "2024-12-12"
+              salon_id: 1
+              usuario_id: 1
+              turno_id: 1
+              foto_cumpleaniero: "foto.jpg"
+              tematica: "Bebitofiufiu"
+              importe_salon: 50000
+              importe_total: 65000
+              servicios:
+                - servicio_id: 1
+                  importe: 15000
+                - servicio_id: 2
+                  importe: 25000
+      responses:
+        '200':
+          description: Reserva creada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+                  reserva:
+                    type: object
+                    properties:
+                      reserva_id:
+                        type: integer
+                      fecha_reserva:
+                        type: string
+                        format: date-time
+                      tematica:
+                        type: string
+                      importe_salon:
+                        type: number
+                        format: float
+                      importe_total:
+                        type: number
+                        format: float
+                      salon_id:
+                        type: integer
+                      salon_titulo:
+                        type: string
+                      salon_direccion:
+                        type: string
+                      salon_capacidad:
+                        type: integer
+                      salon_importe:
+                        type: number
+                        format: float
+                      turno_id:
+                        type: integer
+                      hora_desde:
+                        type: string
+                        format: time
+                      hora_hasta:
+                        type: string
+                        format: time
+                      servicios:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            servicio_id:
+                              type: integer
+                            descripcion:
+                              type: string
+                            importe:
+                              type: number
+                              format: float
+              example:
+                estado: true
+                mensaje: "Reserva creada!"
+                reserva:
+                  reserva_id: 11
+                  fecha_reserva: "2024-12-12T03:00:00.000Z"
+                  tematica: "Bebitofiufiu"
+                  importe_salon: 50000.00
+                  importe_total: 65000.00
+                  salon_id: 1
+                  salon_titulo: "Principal"
+                  salon_direccion: "San Lorenzo 1000"
+                  salon_capacidad: 200
+                  salon_importe: 95000.00
+                  turno_id: 1
+                  hora_desde: "12:00:00"
+                  hora_hasta: "14:00:00"
+                  servicios:
+                    - servicio_id: 1
+                      descripcion: "Sonido"
+                      importe: 15000.00
+                    - servicio_id: 2
+                      descripcion: "Mesa dulce"
+                      importe: 25000.00
+        '404':
+          description: Reserva no creada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+  /api/v1/reservas/{reserva_id}:
+    get:
+      summary: Obtiene una reserva por su ID
+      tags:
+        - reservas
+      parameters:
+        - name: reserva_id
+          in: path
+          required: true
+          description: ID de la reserva a obtener
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Reserva encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  datos:
+                    type: object
+                    properties:
+                      reserva_id:
+                        type: integer
+                      fecha_reserva:
+                        type: string
+                        format: date-time
+                      tematica:
+                        type: string
+                      importe_salon:
+                        type: number
+                        format: float
+                      importe_total:
+                        type: number
+                        format: float
+                      salon_id:
+                        type: integer
+                      salon_titulo:
+                        type: string
+                      salon_direccion:
+                        type: string
+                      salon_capacidad:
+                        type: integer
+                      salon_importe:
+                        type: number
+                        format: float
+                      turno_id:
+                        type: integer
+                      hora_desde:
+                        type: string
+                        format: time
+                      hora_hasta:
+                        type: string
+                        format: time
+                      servicios:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            servicio_id:
+                              type: integer
+                            descripcion:
+                              type: string
+                            importe:
+                              type: number
+                              format: float
+              example:
+                estado: true
+                datos:
+                  reserva_id: 11
+                  fecha_reserva: "2024-12-12T03:00:00.000Z"
+                  tematica: "Bebitofiufiu"
+                  importe_salon: 50000.00
+                  importe_total: 65000.00
+                  salon_id: 1
+                  salon_titulo: "Principal"
+                  salon_direccion: "San Lorenzo 1000"
+                  salon_capacidad: 200
+                  salon_importe: 95000.00
+                  turno_id: 1
+                  hora_desde: "12:00:00"
+                  hora_hasta: "14:00:00"
+                  servicios:
+                    - servicio_id: 1
+                      descripcion: "Sonido"
+                      importe: 15000.00
+                    - servicio_id: 2
+                      descripcion: "Mesa dulce"
+                      importe: 25000.00
+        '404':
+          description: Reserva no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+    put:
+      summary: Modifica una reserva existente
+      tags:
+        - reservas
+      parameters:
+        - name: reserva_id
+          in: path
+          required: true
+          description: ID de la reserva a modificar
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fecha_reserva
+                - turno_id
+              properties:
+                fecha_reserva:
+                  type: string
+                  format: date
+                  description: Fecha de la reserva (formato YYYY-MM-DD)
+                  example: "2024-12-15"
+                turno_id:
+                  type: integer
+                  description: ID del turno
+                  example: 2
+                tematica:
+                  type: string
+                  description: Temática de la fiesta
+                  example: "Superhéroes"
+                foto_cumpleaniero:
+                  type: string
+                  description: Nombre del archivo de foto del cumpleañero
+                  example: "nueva_foto.jpg"
+                importe_salon:
+                  type: number
+                  format: float
+                  minimum: 0
+                  description: Importe del salón
+                  example: 60000.00
+                importe_total:
+                  type: number
+                  format: float
+                  minimum: 0
+                  description: Importe total de la reserva
+                  example: 75000.00
+                activo:
+                  type: integer
+                  minimum: 0
+                  maximum: 1
+                  description: Estado activo de la reserva (0 o 1)
+                  example: 1
+            example:
+              fecha_reserva: "2024-12-15"
+              turno_id: 2
+              tematica: "Superhéroes"
+              importe_total: 75000.00
+      responses:
+        '200':
+          description: Reserva modificada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+                  reserva:
+                    type: object
+                    properties:
+                      reserva_id:
+                        type: integer
+                      fecha_reserva:
+                        type: string
+                        format: date-time
+                      tematica:
+                        type: string
+                      importe_salon:
+                        type: number
+                        format: float
+                      importe_total:
+                        type: number
+                        format: float
+                      salon_id:
+                        type: integer
+                      salon_titulo:
+                        type: string
+                      salon_direccion:
+                        type: string
+                      salon_capacidad:
+                        type: integer
+                      salon_importe:
+                        type: number
+                        format: float
+                      turno_id:
+                        type: integer
+                      hora_desde:
+                        type: string
+                        format: time
+                      hora_hasta:
+                        type: string
+                        format: time
+                      servicios:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            servicio_id:
+                              type: integer
+                            descripcion:
+                              type: string
+                            importe:
+                              type: number
+                              format: float
+              example:
+                estado: true
+                mensaje: "Reserva modificada correctamente"
+                reserva:
+                  reserva_id: 11
+                  fecha_reserva: "2024-12-15T03:00:00.000Z"
+                  tematica: "Superhéroes"
+                  importe_salon: 50000.00
+                  importe_total: 65000.00
+                  salon_id: 1
+                  salon_titulo: "Principal"
+                  salon_direccion: "San Lorenzo 1000"
+                  salon_capacidad: 200
+                  salon_importe: 95000.00
+                  turno_id: 2
+                  hora_desde: "14:00:00"
+                  hora_hasta: "18:00:00"
+                  servicios:
+                    - servicio_id: 1
+                      descripcion: "Sonido"
+                      importe: 15000.00
+        '404':
+          description: Reserva no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+    delete:
+      summary: Elimina una reserva (marca como inactiva)
+      tags:
+        - reservas
+      parameters:
+        - name: reserva_id
+          in: path
+          required: true
+          description: ID de la reserva a eliminar
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Reserva eliminada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+              example:
+                estado: true
+                mensaje: "Reserva eliminada correctamente"
+        '404':
+          description: Reserva no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+
