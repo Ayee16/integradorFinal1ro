@@ -1,12 +1,14 @@
 import Reservas from "../db/reservas.js";
 import ReservasServicios from "../db/reservas_servicios.js";
 import { conexion } from '../db/conexion.js';
+import NotificacionesServicio from './notificacionesServicio.js';
 
 export default class ReservasServicio {
 
     constructor(){
         this.reserva = new Reservas();
         this.reservas_servicios = new ReservasServicios();
+        this.notificaciones = new NotificacionesServicio();
     }
 
     buscarTodos = () => {
@@ -63,13 +65,32 @@ export default class ReservasServicio {
 
         const reserva_id = result[0].reserva_id;
 
-        // Crear los servicios asociados a la reserva si existen
         if (servicios && Array.isArray(servicios) && servicios.length > 0) {
             await this.reservas_servicios.crear(reserva_id, servicios);
         }
 
-        // Buscar la reserva completa con todos sus datos
-        return this.reserva.buscarPorId(reserva_id);
+        const reservaCompleta = await this.reserva.buscarPorId(reserva_id);
+
+
+        if (reservaCompleta && Array.isArray(reservaCompleta) && reservaCompleta.length > 0) {
+
+            const datosNotificacion = {
+                usuario_id: usuario_id,
+                fecha_reserva: fecha_reserva,
+                salon_titulo: reservaCompleta[0].salon_titulo,
+                hora_desde: reservaCompleta[0].hora_desde,
+                hora_hasta: reservaCompleta[0].hora_hasta,
+                datos: reservaCompleta[0]
+            };
+            
+
+            this.notificaciones.enviarNotificacionReserva(datosNotificacion)
+                .catch(error => {
+                    console.error('Error al enviar notificación (no crítico):', error);
+                });
+        }
+
+        return reservaCompleta;
     }
 
     eliminar = async (reserva_id) =>{
