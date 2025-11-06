@@ -10,6 +10,10 @@ export default class UsuariosServicio {
         return this.usuarios.buscarTodos();
     }
 
+    buscarPorUsuario = (usuario_id, contrasenia) => {
+        return this.usuarios.buscarPorUsuario(usuario_id,contrasenia);
+    }
+
     buscarPorId = (usuario_id) => {
         return this.usuarios.buscarPorId(usuario_id);
     }
