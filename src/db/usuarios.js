@@ -17,6 +17,25 @@ export default class Usuarios {
         return result[0];
     }
 
+     // 🔍 Nuevo método para login con passport-local
+    buscarPorNombre_Usuario = async (nombre_usuario) => {
+        const sql = `
+            SELECT 
+                usuario_id,
+                nombre,
+                apellido,
+                nombre_usuario,
+                contrasenia,
+                tipo_usuario,
+                activo
+            FROM usuarios
+            WHERE nombre_usuario = ? AND activo = 1;
+        `;
+        const [datos] = await conexion.execute(sql, [nombre_usuario]);
+        return datos[0]; // devuelve el usuario o undefined
+    }
+
+
     modificar =async(usuario_id,datos) =>{
         const camposAActualizar = Object.keys(datos); 
         const valoresAActualizar = Object.values(datos); 

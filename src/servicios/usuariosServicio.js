@@ -14,6 +14,9 @@ export default class UsuariosServicio {
         return this.usuarios.buscarPorId(usuario_id);
     }
 
+    // ✅ Nuevo método que usa el modelo
+    buscarPorNombre_Usuario = (nombre_usuario) => this.usuarios.buscarPorNombre_Usuario(nombre_usuario);
+
     modificar = (usuario_id,datos) => {
         const existe = this.usuarios.buscarPorId(usuario_id);
         if (!existe) {

@@ -1,11 +1,28 @@
 import express from 'express';
+import passport from 'passport';
 import ReservasControlador from '../../controladores/reservasControlador.js';
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
+// import { verificarToken } from "../middlewares/verificarToken.js";
+// import { verificarRol } from "../middlewares/verificarRol.js";
 
-
-const reservasControlador = new ReservasControlador();
 const router = express.Router();
+const reservasControlador = new ReservasControlador();
+//const router = express.Router();
+
+// Solo usuarios autenticados con JWT
+router.get(
+    "/",
+    passport.authenticate("jwt", { session: false }),
+    reservasControlador.buscarTodos
+);
+
+// Solo clientes autenticados
+router.post(
+    "/",
+    passport.authenticate("jwt", { session: false }),
+    reservasControlador.crear
+);
 
 router.get('/', reservasControlador.buscarTodos);
 router.get('/:reserva_id', reservasControlador.buscarPorId);
