@@ -92,24 +92,53 @@ export default class Reservas {
         return this.buscarPorId(result.insertId);
         }
 
-    modificar = async (reserva_id, datos) => {
-    const sql = `
-        UPDATE reservas 
-        SET 
-            fecha_reserva = ?, 
-            turno_id = ?, 
-            activo = ?
-        WHERE reserva_id = ?
-    `;
 
-    const [resultado] = await conexion.execute(sql, [
-        datos.fecha_reserva,
-        datos.turno_id,
-        datos.activo ?? 1,
-        reserva_id
-    ]);
-    return resultado.affectedRows > 0;
+    modificar = async (reserva_id, reserva) => {
+        const {
+            fecha_reserva,
+            salon_id,
+            usuario_id,
+            turno_id,
+            foto_cumpleaniero,
+            tematica,
+            importe_salon,
+            importe_total
+        } = reserva;
+
+        const sql = `
+            UPDATE reservas 
+            SET 
+                fecha_reserva = ?, 
+                salon_id = ?, 
+                usuario_id = ?, 
+                turno_id = ?, 
+                foto_cumpleaniero = ?, 
+                tematica = ?, 
+                importe_salon = ?, 
+                importe_total = ?
+            WHERE reserva_id = ?
+        `;
+
+        const [result] = await conexion.execute(sql, [
+            fecha_reserva,
+            salon_id,
+            usuario_id,
+            turno_id,
+            foto_cumpleaniero,
+            tematica,
+            importe_salon,
+            importe_total,
+            reserva_id
+        ]);
+
+        if (result.affectedRows === 0) {
+            return null;
+        }
+
+        return this.buscarPorId(reserva_id);
     }
+
+
 
     eliminar = async (reserva_id) => {
         const sql = `UPDATE reservas SET activo = 0 WHERE reserva_id = ?`;
