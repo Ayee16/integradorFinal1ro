@@ -1,9 +1,73 @@
 paths:
+  /api/v1/auth/login:
+    post:
+      summary: Inicia sesión y devuelve un token JWT
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre_usuario
+                - contrasenia
+              properties:
+                nombre_usuario:
+                  type: string
+                  example: admin@correo.com
+                contrasenia:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  token:
+                    type: string
+              example:
+                estado: true
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '401':
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+              example:
+                estado: false
+                mensaje: Datos inválidos
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+
   /api/v1/usuarios:
     get:
       summary: Obtiene una lista de todos los usuarios
       tags:
         - usuarios
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Lista de usuarios
@@ -57,6 +121,8 @@ paths:
       summary: Crea un nuevo usuario
       tags:
         - usuarios
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -146,6 +212,8 @@ paths:
       summary: Obtiene un usuario por su ID
       tags:
         - usuarios
+      security:
+        - bearerAuth: []
       parameters:
         - name: usuario_id
           in: path
@@ -205,6 +273,8 @@ paths:
       summary: Modifica un usuario existente
       tags:
         - usuarios
+      security:
+        - bearerAuth: []
       parameters:
         - name: usuario_id
           in: path
@@ -289,6 +359,8 @@ paths:
       summary: Elimina un usuario (marca como inactivo)
       tags:
         - usuarios
+      security:
+        - bearerAuth: []
       parameters:
         - name: usuario_id
           in: path
@@ -333,3 +405,65 @@ paths:
                     type: boolean
                   mensaje:
                     type: string
+  /api/v1/usuarios/clientes:
+    get:
+      summary: Obtiene la lista de clientes (tipo_usuario = 3)
+      tags:
+        - usuarios
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  datos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        usuario_id:
+                          type: integer
+                        nombre:
+                          type: string
+                        apellido:
+                          type: string
+                        nombre_usuario:
+                          type: string
+                        tipo_usuario:
+                          type: integer
+            example:
+              estado: true
+              datos:
+                - usuario_id: 5
+                  nombre: Laura
+                  apellido: Díaz
+                  nombre_usuario: laura@example.com
+                  tipo_usuario: 3
+      '403':
+        description: Acceso denegado
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                estado:
+                  type: string
+                mensaje:
+                  type: string
+      '500':
+        description: Error interno del servidor
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                estado:
+                  type: boolean
+                mensaje:
+                  type: string
