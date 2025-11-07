@@ -31,7 +31,17 @@ router.post('/',
     ],
     usuariosControlador.crear);
 
-router.delete('/:usuario_id', usuariosControlador.eliminar);
+router.post('/registro-cliente',
+    [
+        check('nombre', 'El nombre es necesario').notEmpty(),
+        check('apellido', 'El apellido es necesario.').notEmpty(),
+        check('nombre_usuario', 'El nombre de usuario es necesario.').notEmpty(),
+        check('contrasenia', 'La contraseña es necesaria.').notEmpty(),
+        check('celular', 'El campo celular debe ser numerico.').isInt(),
+        validarCampos
+    ],
+    usuariosControlador.registrarCliente);
 
+router.delete('/:usuario_id', usuariosControlador.eliminar);
 
 export {router} ;
