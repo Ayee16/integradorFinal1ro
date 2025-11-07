@@ -39,5 +39,4 @@ router.post('/', autorizarUsuarios([1]),
 
 router.delete('/:usuario_id', autorizarUsuarios([1]), usuariosControlador.eliminar);
 
-
 export {router} ;
