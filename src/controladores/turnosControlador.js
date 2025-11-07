@@ -1,4 +1,5 @@
 import TurnosServicio from '../servicios/turnosServicio.js'
+import apicache from 'apicache'
 
 export default class TurnosControlador {
 
@@ -67,6 +68,8 @@ export default class TurnosControlador {
                 })
             }
 
+            apicache.clear('/api/v1/turnos'); //cualquier cosa borrar
+
             res.json({
                 estado: true, 
                 mensaje: 'Turno creado!',
@@ -103,6 +106,8 @@ export default class TurnosControlador {
             });
         }
 
+        apicache.clear('/api/v1/turnos'); //cualquier cosa borrar
+
         res.json({
             estado: true,
             mensaje: 'Turno modificado correctamente',
@@ -131,6 +136,8 @@ export default class TurnosControlador {
                     mensaje: 'Turno no encontrado'
                 });
             }
+
+            apicache.clear('/api/v1/turnos'); //cualquier cosa borrar
 
             return res.json({
                 estado: true,

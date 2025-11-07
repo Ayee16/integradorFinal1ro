@@ -1,4 +1,5 @@
 import ServiciosServicio from "../servicios/serviciosServicio.js";
+import apicache from "apicache";
 
 export default class ServiciosControlador{
     
@@ -65,6 +66,8 @@ export default class ServiciosControlador{
                 })
             }
 
+            apicache.clear('/api/v1/servicios'); //cualquier cosa borrar
+
             res.json({
                 estado: true, 
                 mensaje: 'Servicio creado!',
@@ -95,6 +98,8 @@ export default class ServiciosControlador{
                 });
             }
 
+            apicache.clear('/api/v1/servicios'); //cualquier cosa borrar
+
             res.json({
                 estado: true,
                 mensaje: 'Servicio modificado',
@@ -121,6 +126,8 @@ export default class ServiciosControlador{
                 });
             }
             
+            apicache.clear('/api/v1/servicios'); //cualquier cosa borrar
+
             res.json({
                 estado: true,
                 mensaje: 'Servicio eliminado'

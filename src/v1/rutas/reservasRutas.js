@@ -3,11 +3,14 @@ import ReservasControlador from '../../controladores/reservasControlador.js';
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
 
+import apicache from 'apicache'; //cualquier cosa borrar
+
+const cache = apicache.middleware; //cualquier cosa borrar
 
 const reservasControlador = new ReservasControlador();
 const router = express.Router();
 
-router.get('/', reservasControlador.buscarTodos);
+router.get('/', cache('5 minutes'), reservasControlador.buscarTodos); //cualquier cosa borrar
 router.get('/:reserva_id', reservasControlador.buscarPorId);
 router.put('/:reserva_id', 
     [

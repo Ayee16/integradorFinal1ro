@@ -2,11 +2,14 @@ import express from 'express';
 import TurnosControlador from '../../controladores/turnosControlador.js';
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
+import apicache from 'apicache';
 
 const turnosControlador = new TurnosControlador();
 const router = express.Router();
 
-router.get('/', turnosControlador.buscarTodos);
+const cache = apicache.middleware;//cualquier cosa borrar
+
+router.get('/', cache('5 minutes'), turnosControlador.buscarTodos);//cualquier cosa borrar
 
 router.get('/:turno_id', turnosControlador.buscarPorId);
 

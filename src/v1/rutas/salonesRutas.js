@@ -2,14 +2,17 @@ import express from 'express';
 import SalonesControlador from '../../controladores/salonesControlador.js'
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
+import apicache from 'apicache';//cualquier cosa borrar
 
 const salonesControlador = new SalonesControlador();
 const router = express.Router();
 
+const cache = apicache.middleware;//cualquier cosa borrar
 
 
 
-router.get('/', salonesControlador.buscarTodos);
+
+router.get('/', cache('5 minutes'), salonesControlador.buscarTodos);//cualquier cosa borrar
 
 router.get('/:salon_id', salonesControlador.buscarPorId);
 
