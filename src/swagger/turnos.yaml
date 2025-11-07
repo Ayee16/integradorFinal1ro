@@ -59,6 +59,8 @@ paths:
       summary: Crea un nuevo turno
       tags:
         - turnos
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -127,6 +129,17 @@ paths:
                   orden: 1
                   activo: 1
                   horario: 08:00:00-12:00:00
+        '401':
+          description: Token inválido o ausente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
         '404':
           description: Turno no creado
           content:
@@ -216,6 +229,8 @@ paths:
       summary: Modifica un turno existente
       tags:
         - turnos
+      security:
+        - bearerAuth: []
       parameters:
         - name: turno_id
           in: path
@@ -302,6 +317,17 @@ paths:
                     type: boolean
                   mensaje:
                     type: string
+        '401':
+          description: Token inválido o ausente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
         '404':
           description: Turno no encontrado
           content:
@@ -328,6 +354,8 @@ paths:
       summary: Elimina un turno (marca como inactivo)
       tags:
         - turnos
+      security:
+        - bearerAuth: []
       parameters:
         - name: turno_id
           in: path
@@ -363,6 +391,17 @@ paths:
                     type: string
         '500':
           description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '401':
+          description: Token inválido o ausente
           content:
             application/json:
               schema:
