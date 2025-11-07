@@ -3,13 +3,19 @@ import ReservasControlador from '../../controladores/reservasControlador.js';
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
 import autorizarUsuarios from '../../middlewares/authUsuarios.js';
-
+import { generarInforme } from '../../controladores/informeControlador.js';
 import apicache from 'apicache'; //cualquier cosa borrar
 
 const cache = apicache.middleware; //cualquier cosa borrar
-
 const reservasControlador = new ReservasControlador();
 const router = express.Router();
+
+router.get('/test-informe', (req, res) => {
+    console.log("✅ Entró al endpoint /test-informe");
+    res.json({ mensaje: "Entró correctamente" });
+});
+
+router.get('/informe', autorizarUsuarios([1]), generarInforme);
 
 router.get('/', autorizarUsuarios([1,2,3]) , cache('5 minutes'), reservasControlador.buscarTodos); //cualquier cosa borrar
 
@@ -40,5 +46,17 @@ router.post('/', autorizarUsuarios([1,3]) ,
     reservasControlador.crear);
 
 router.delete('/:reserva_id', autorizarUsuarios([1]), reservasControlador.eliminar);
+
+// reporte detallado
+router.get('/reporte-detallado', autorizarUsuarios([1]), async (req, res) => {
+    const datos = await reservasControlador.reservasServicio.generarReporteDetallado();
+    res.json(datos);
+});
+
+// reporte estadístico
+router.get('/reporte-estadisticas', autorizarUsuarios([1]), async (req, res) => {
+    const datos = await reservasControlador.reservasServicio.generarReporteEstadisticas();
+    res.json(datos);
+});
 
 export { router };

@@ -9,6 +9,7 @@ import { router as v1UsuariosRutas } from './v1/rutas/usuariosRutas.js';
 import { router as v1TurnosRutas } from './v1/rutas/turnosRutas.js';
 import { router as v1ServiciosRutas } from './v1/rutas/serviciosRutas.js';
 import { router as v1ReservasRutas } from './v1/rutas/reservasRutas.js';
+//import reservasRutas from './rutas/reservasRutas.js';
 
 const app = express();
 app.use(express.json());
@@ -36,7 +37,6 @@ app.use('/api/v1/turnos', passport.authenticate('jwt', { session: false }), v1Tu
 app.use('/api/v1/servicios', passport.authenticate('jwt', { session: false }), v1ServiciosRutas);
 
 app.use('/api/v1/reservas', passport.authenticate('jwt', { session: false }), v1ReservasRutas);
-
 setupSwagger(app);
 
 export default app;

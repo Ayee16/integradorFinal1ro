@@ -101,4 +101,36 @@ export default class ReservasServicio {
     return this.reserva.eliminar(reserva_id);
     }
 
+    generarInforme = async (formato) => {
+    if (formato === 'pdf') {
+        // 🔹 Obtener datos del procedimiento almacenado
+        const datosReporte = await this.generarReporteCSV();
+
+        // 🔹 Usar tu helper que genera el PDF
+        const pdf = await this.informes.informeReservasPdf(datosReporte);
+        
+        return {
+            buffer: pdf,
+            headers: {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': 'inline; filename="reporte.pdf"'
+            }
+        };
+
+    } else if (formato === 'csv') {
+        // 🔹 Obtener datos del procedimiento almacenado
+        const datosReporte = await this.generarReporteCSV();
+
+        // 🔹 Usar tu helper que genera el CSV
+        const csv = await this.informes.informeReservasCsv(datosReporte);
+        
+        return {
+            path: csv,
+            headers: {
+                'Content-Type': 'text/csv',
+                'Content-Disposition': 'attachment; filename="reporte.csv"'
+            }
+        };
+    }
+}
 }
