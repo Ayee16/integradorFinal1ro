@@ -1,4 +1,4 @@
-<!-- Para ingresar lanzar servidor con npm run des y luego ingresar aqui http://localhost:3000/registro-cliente.html -->
+<!-- para ingresar al register correr con npm run des y luego entrar a http://localhost:3000/registro-cliente.html -->
 
 <!DOCTYPE html>
 <html lang="es">
@@ -6,13 +6,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registro de Cliente</title>
-    <link rel="stylesheet" href="/css/registro-cliente.css" />
+    <link rel="stylesheet" href="./styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Pantalla principal de registro -->
+
     <div class="container">
         <div class="card">
             <section class="panel register">
@@ -45,7 +45,6 @@
                 </form>
                 <p id="registerResult" class="status"></p>
                 
-                <!-- Enlace para ir al login si ya tiene cuenta -->
                 <div class="login-link">
                     <p>¿Ya tenés una cuenta? <a href="#" id="goToLogin">Iniciar sesión</a></p>
                 </div>
@@ -53,7 +52,6 @@
         </div>
     </div>
 
-    <!-- Modal de login -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close-login">&times;</span>
@@ -87,7 +85,6 @@
         const loginModal = document.getElementById('loginModal');
         const closeLoginModal = document.querySelector('.close-login');
 
-        // Manejar apertura y cierre del modal de login
         goToLogin.addEventListener('click', (e) => {
             e.preventDefault();
             loginModal.style.display = 'block';
@@ -103,7 +100,6 @@
             }
         });
 
-        // Registro de usuario (sin necesidad de admin)
         registerForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
@@ -112,7 +108,7 @@
 
             const data = Object.fromEntries(new FormData(registerForm).entries());
             data.celular = Number(data.celular);
-            data.tipo_usuario = 3; // Cliente
+            data.tipo_usuario = 3;
 
             try {
                 const response = await fetch('http://localhost:3000/api/v1/usuarios/registro', {
@@ -139,7 +135,6 @@
             }
         });
 
-        // Login de usuario
         loginForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
@@ -163,9 +158,8 @@
                 loginStatus.textContent = '¡Sesión iniciada correctamente!';
                 loginStatus.classList.add('ok');
                 
-                // Redirigir al usuario logueado (puedes cambiar esta URL)
                 setTimeout(() => {
-                    window.location.href = '/dashboard'; // O donde quieras redirigir
+                    window.location.href = '/api/v1/reservas';
                 }, 1500);
             } catch (err) {
                 loginStatus.textContent = 'Error: ' + err.message;

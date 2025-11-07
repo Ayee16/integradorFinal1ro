@@ -25,6 +25,17 @@ router.put('/:usuario_id', autorizarUsuarios([1]),
     usuariosControlador.modificar);
 
 
+router.post('/registro', 
+    [
+        check('nombre', 'El nombre es necesario').notEmpty(),
+        check('apellido', 'El apellido es necesario.').notEmpty(),
+        check('nombre_usuario', 'El nombre de usuario es necesario.').notEmpty().isEmail(),
+        check('contrasenia', 'La contrasenia es necesaria.').notEmpty(),
+        check('celular', 'El campo celular debe ser numerico.').isInt(),
+        validarCampos
+    ],
+    usuariosControlador.registrarCliente);
+
 router.post('/', autorizarUsuarios([1]), 
     [
         check('nombre', 'El nombre es necesario').notEmpty(),
