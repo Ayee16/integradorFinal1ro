@@ -1,50 +1,134 @@
+<!-- Para ingresar lanzar servidor con npm run des y luego ingresar aqui http://localhost:3000/registro-cliente.html -->
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registro de Cliente</title>
     <link rel="stylesheet" href="/css/registro-cliente.css" />
 </head>
-
 <body>
-    <h1>Registro de Cliente</h1>
-    <form id="registroForm">
-        <input name="nombre" placeholder="Nombre" required />
-        <input name="apellido" placeholder="Apellido" required />
-        <input name="nombre_usuario" placeholder="Correo" type="email" required />
-        <input name="contrasenia" placeholder="Contraseña" type="password" required />
-        <input name="celular" placeholder="Celular" type="tel" required />
-        <button type="submit">Registrar</button>
-    </form>
+    <div class="card">
+        <section class="panel login">
+            <header>
+                <h1>Bienvenido de nuevo</h1>
+                <p>Iniciá sesión con un usuario administrador para habilitar el registro.</p>
+            </header>
+            <form id="loginForm" class="form">
+                <div class="input-group">
+                    <label for="admin-usuario">Usuario administrador</label>
+                    <input id="admin-usuario" name="nombre_usuario" type="email" placeholder="admin@correo.com" required />
+                </div>
+                <div class="input-group">
+                    <label for="admin-pass">Contraseña</label>
+                    <input id="admin-pass" name="contrasenia" type="password" placeholder="********" required />
+                </div>
+                <button type="submit">Iniciar sesión</button>
+            </form>
+            <p id="loginStatus" class="status">No autenticado</p>
+        </section>
 
-    <pre id="resultado">Esperando envío...</pre>
+        <section class="panel register">
+            <header>
+                <h1>Registrar nuevo cliente</h1>
+                <p>Ingresá los datos de la persona que tendrá acceso al sistema.</p>
+            </header>
+            <form id="registerForm" class="form">
+                <div class="input-group">
+                    <label for="cliente-nombre">Nombre</label>
+                    <input id="cliente-nombre" name="nombre" placeholder="Francisco" required />
+                </div>
+                <div class="input-group">
+                    <label for="cliente-apellido">Apellido</label>
+                    <input id="cliente-apellido" name="apellido" placeholder="López" required />
+                </div>
+                <div class="input-group">
+                    <label for="cliente-usuario">Correo</label>
+                    <input id="cliente-usuario" name="nombre_usuario" type="email" placeholder="cliente@correo.com" required />
+                </div>
+                <div class="input-group">
+                    <label for="cliente-pass">Contraseña</label>
+                    <input id="cliente-pass" name="contrasenia" type="password" placeholder="********" required />
+                </div>
+                <div class="input-group">
+                    <label for="cliente-celular">Celular</label>
+                    <input id="cliente-celular" name="celular" type="tel" placeholder="1122334455" required />
+                </div>
+                <button type="submit">Crear cuenta</button>
+            </form>
+
+            <div class="result-wrapper">
+                <pre id="registerResult">Esperando envío...</pre>
+            </div>
+        </section>
+    </div>
 
     <script>
-        const form = document.getElementById('registroForm');
-        const resultado = document.getElementById('resultado');
+        let token = '';
+        const loginForm = document.getElementById('loginForm');
+        const loginStatus = document.getElementById('loginStatus');
+        const registerForm = document.getElementById('registerForm');
+        const registerResult = document.getElementById('registerResult');
 
-        form.addEventListener('submit', async (event) => {
+        loginForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const datos = Object.fromEntries(new FormData(form).entries());
-            datos.celular = Number(datos.celular);
+            loginStatus.textContent = 'Autenticando...';
+            loginStatus.classList.remove('ok', 'error');
 
             try {
-                const respuesta = await fetch('http://localhost:3000/api/v1/usuarios/registro-cliente', {
+                const credentials = Object.fromEntries(new FormData(loginForm).entries());
+                const response = await fetch('http://localhost:3000/api/v1/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(datos),
+                    body: JSON.stringify(credentials),
                 });
 
-                const json = await respuesta.json();
-                resultado.textContent = JSON.stringify(json, null, 2);
+                const data = await response.json();
+
+                if (!response.ok || !data.estado) {
+                    throw new Error(data?.mensaje || 'Credenciales inválidas');
+                }
+
+                token = data.token;
+                loginStatus.textContent = 'Autenticado. Token listo para registrar clientes.';
+                loginStatus.classList.add('ok');
             } catch (err) {
-                resultado.textContent = 'Error de red: ' + err.message;
+                token = '';
+                loginStatus.textContent = 'Error: ' + err.message;
+                loginStatus.classList.add('error');
+            }
+        });
+
+        registerForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            if (!token) {
+                registerResult.textContent = 'Error: primero iniciá sesión como administrador.';
+                return;
+            }
+
+            const data = Object.fromEntries(new FormData(registerForm).entries());
+            data.celular = Number(data.celular);
+            data.tipo_usuario = 3;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/v1/usuarios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const json = await response.json();
+                registerResult.textContent = JSON.stringify(json, null, 2);
+            } catch (err) {
+                registerResult.textContent = 'Error: ' + err.message;
             }
         });
     </script>
 </body>
-
 </html>
