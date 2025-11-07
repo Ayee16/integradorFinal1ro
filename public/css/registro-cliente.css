@@ -1,23 +1,25 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 2rem;
-  background: #f2f2f2;
-  color: #333;
+  display: grid;
+  gap: 2rem;
+  max-width: 720px;
+}
+
+section {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 h1 {
   margin-bottom: 1rem;
+  font-size: 1.4rem;
 }
 
 form {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  max-width: 320px;
-  padding: 1.5rem;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 360px;
 }
 
 input {
@@ -43,13 +45,32 @@ button:hover {
   background: #005bcc;
 }
 
+.estado {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.estado.ok {
+  color: #0a7a2d;
+}
+
+.estado.error {
+  color: #c62828;
+}
+
 pre {
   margin-top: 1.5rem;
   padding: 1rem;
-  background: #fff;
+  background: #f7f7f7;
   border-radius: 6px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
   max-width: 540px;
   overflow-x: auto;
 }
 
+@media (min-width: 900px) {
+  main {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
