@@ -22,7 +22,7 @@ export default class Usuarios {
                      FROM usuarios AS u
                      WHERE u.tipo_usuario = 3 AND u.activo = 1;`
         const [result] = await conexion.execute(sql);
-        return result[0];
+        return result;
     };
 
     buscarPorUsuario = async (nombre_usuario) => {

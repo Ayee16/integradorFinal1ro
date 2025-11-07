@@ -11,9 +11,9 @@ const router = express.Router();
 
 router.get('/', autorizarUsuarios([1]), usuariosControlador.buscarTodos);
 
-router.get('/:usuario_id', autorizarUsuarios([1]), usuariosControlador.buscarPorId);
+router.get('/clientes', autorizarUsuarios([2]), usuariosControlador.buscarCliente);
 
-router.get('/:clientes', autorizarUsuarios([2]), usuariosControlador.buscarCliente);
+router.get('/:usuario_id', autorizarUsuarios([1]), usuariosControlador.buscarPorId);
 
 router.put('/:usuario_id', autorizarUsuarios([1]),
     [check('nombre', 'El nombre es necesario').notEmpty(),
