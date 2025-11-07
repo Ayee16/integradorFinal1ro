@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Cliente</title>
+    <link rel="stylesheet" href="/css/registro-cliente.css" />
+</head>
+
+<body>
+    <h1>Registro de Cliente</h1>
+    <form id="registroForm">
+        <input name="nombre" placeholder="Nombre" required />
+        <input name="apellido" placeholder="Apellido" required />
+        <input name="nombre_usuario" placeholder="Correo" type="email" required />
+        <input name="contrasenia" placeholder="Contraseña" type="password" required />
+        <input name="celular" placeholder="Celular" type="tel" required />
+        <button type="submit">Registrar</button>
+    </form>
+
+    <pre id="resultado">Esperando envío...</pre>
+
+    <script>
+        const form = document.getElementById('registroForm');
+        const resultado = document.getElementById('resultado');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const datos = Object.fromEntries(new FormData(form).entries());
+            datos.celular = Number(datos.celular);
+
+            try {
+                const respuesta = await fetch('http://localhost:3000/api/v1/usuarios/registro-cliente', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos),
+                });
+
+                const json = await respuesta.json();
+                resultado.textContent = JSON.stringify(json, null, 2);
+            } catch (err) {
+                resultado.textContent = 'Error de red: ' + err.message;
+            }
+        });
+    </script>
+</body>
+
+</html>
