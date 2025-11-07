@@ -1,6 +1,6 @@
 import ReservasServicio from "../servicios/reservasServicio.js";
 import apicache from "apicache";
-import InformeServicio from '../servicios/informesServicio.js';
+import InformeServicio from '../servicios/informeServicio.js';
 
 export default class ReservasControlador{
 
