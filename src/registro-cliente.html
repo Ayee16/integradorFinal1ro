@@ -12,43 +12,70 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="main-container">
+        <!-- Card de registro (izquierda) -->
+        <div class="container">
+            <div class="card">
+                <section class="panel register">
+                    <header>
+                        <h1>Registrate</h1>
+                        <p>Creá tu cuenta para acceder al sistema de reservas.</p>
+                    </header>
+                    <form id="registerForm" class="form">
+                        <div class="input-group">
+                            <label for="cliente-nombre">Nombre</label>
+                            <input id="cliente-nombre" name="nombre" placeholder="Tralalero" required />
+                        </div>
+                        <div class="input-group">
+                            <label for="cliente-apellido">Apellido</label>
+                            <input id="cliente-apellido" name="apellido" placeholder="Tralala" required />
+                        </div>
+                        <div class="input-group">
+                            <label for="cliente-usuario">Correo electrónico</label>
+                            <input id="cliente-usuario" name="nombre_usuario" type="email" placeholder="tralalerotralala@correo.com" required />
+                        </div>
+                        <div class="input-group">
+                            <label for="cliente-pass">Contraseña</label>
+                            <input id="cliente-pass" name="contrasenia" type="password" placeholder="********" required />
+                        </div>
+                        <div class="input-group">
+                            <label for="cliente-celular">Número de celular</label>
+                            <input id="cliente-celular" name="celular" type="tel" placeholder="1122334455" required />
+                        </div>
+                        <button type="submit">Crear mi cuenta</button>
+                    </form>
+                    <p id="registerResult" class="status"></p>
+                    
+                    <div class="login-link">
+                        <p>¿Ya tenés una cuenta? <a href="#" id="goToLogin">Iniciar sesión</a></p>
+                    </div>
+                </section>
+            </div>
+        </div>
 
-    <div class="container">
-        <div class="card">
-            <section class="panel register">
-                <header>
-                    <h1>Registrate</h1>
-                    <p>Creá tu cuenta para acceder al sistema de reservas.</p>
-                </header>
-                <form id="registerForm" class="form">
-                    <div class="input-group">
-                        <label for="cliente-nombre">Nombre</label>
-                        <input id="cliente-nombre" name="nombre" placeholder="Tralalero" required />
-                    </div>
-                    <div class="input-group">
-                        <label for="cliente-apellido">Apellido</label>
-                        <input id="cliente-apellido" name="apellido" placeholder="Tralala" required />
-                    </div>
-                    <div class="input-group">
-                        <label for="cliente-usuario">Correo electrónico</label>
-                        <input id="cliente-usuario" name="nombre_usuario" type="email" placeholder="tralalerotralala@correo.com" required />
-                    </div>
-                    <div class="input-group">
-                        <label for="cliente-pass">Contraseña</label>
-                        <input id="cliente-pass" name="contrasenia" type="password" placeholder="********" required />
-                    </div>
-                    <div class="input-group">
-                        <label for="cliente-celular">Número de celular</label>
-                        <input id="cliente-celular" name="celular" type="tel" placeholder="1122334455" required />
-                    </div>
-                    <button type="submit">Crear mi cuenta</button>
-                </form>
-                <p id="registerResult" class="status"></p>
-                
-                <div class="login-link">
-                    <p>¿Ya tenés una cuenta? <a href="#" id="goToLogin">Iniciar sesión</a></p>
+        <!-- Card informativa (derecha) -->
+        <div class="info-container">
+            <div class="info-card">
+                <div class="company-info">
+                    <h2>Bienvenido a Reservas de Salones de Cumpleaños</h2>
+                    <p>Registrate y comenzá a planear la fiesta perfecta hoy mismo.</p>
                 </div>
-            </section>
+
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <img src="./img/futbol5-registrocliente.png" alt="Salón Principal" />
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./img/mdj-registrocliente.png" alt="Decoración" />
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./img/mesadulce-registrocliente.png" alt="Catering" />
+                    </div>
+                    <div class="gallery-item">
+                        <img src="./img/mago-registrocliente.png" alt="Entretenimiento" />
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -159,7 +186,7 @@
                 loginStatus.classList.add('ok');
                 
                 setTimeout(() => {
-                    window.location.href = '/api/v1/reservas';
+                    window.location.href = '/login-success.html';
                 }, 1500);
             } catch (err) {
                 loginStatus.textContent = 'Error: ' + err.message;
