@@ -62,17 +62,17 @@
     <table>
         <thead>
             <tr>
-                <th>Fecha de reserva</th>
-                <th>Título</th>
-                <th>Orden</th>
+                <th>Mes</th>
+                <th>Total de reservas</th>
+                <th>Total recaudado</th>
             </tr>
         </thead>
         <tbody>
             {{#each reservas}}
             <tr>
-                <td>{{this.fecha_reserva}}</td>
-                <td>{{this.titulo}}</td>
-                <td>{{this.orden}}</td>
+                <td>{{this.mes}}</td>
+                <td>{{this.total_reservas}}</td>
+                <td>{{this.total_recaudado}}</td>
             </tr>
             {{/each}}
         </tbody>

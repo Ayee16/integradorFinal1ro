@@ -20,9 +20,9 @@ export default class InformeServicio {
             const csvWriter = createObjectCsvWriter({
                 path: 'reservas.csv',
                 header: [
-                    {id: 'fecha_reserva', title: 'Fecha reserva'},
-                    {id: 'titulo', title: 'Título'},
-                    {id: 'orden', title: 'Orden'}
+                    {id: 'mes', title: 'Mes'},
+                    {id: 'total_reservas', title: 'Total de reservas'},
+                    {id: 'total_recaudado', title: 'Total recaudado'}
                 ]
             });
             
@@ -60,7 +60,7 @@ export default class InformeServicio {
             
             // Compila la plantilla con Handlebars
             const template = handlebars.compile(plantillaHtml);
-            const htmlFinal = template({ reservas: datosReporte });
+            const htmlFinal = template({ reservas: datosReporte, fechaActual });
 
             const browser = await puppeteer.launch({
                 headless: true,
