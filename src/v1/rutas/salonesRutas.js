@@ -3,6 +3,8 @@ import SalonesControlador from '../../controladores/salonesControlador.js'
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
 import apicache from 'apicache';//cualquier cosa borrar
+import autorizarUsuarios from '../../middlewares/authUsuarios.js';
+
 
 const salonesControlador = new SalonesControlador();
 const router = express.Router();
@@ -16,7 +18,7 @@ router.get('/', cache('5 minutes'), salonesControlador.buscarTodos);//cualquier 
 
 router.get('/:salon_id', salonesControlador.buscarPorId);
 
-router.put('/:salon_id', 
+router.put('/:salon_id',
     [
         check('titulo', 'El titulo es necesario').notEmpty(),
         check('direccion', 'La dirección es necesaria.').notEmpty(),
@@ -25,7 +27,7 @@ router.put('/:salon_id',
         validarCampos
     ],salonesControlador.modificar);
 
-router.post('/', 
+router.post('/', autorizarUsuarios([1,2]),
     [
         check('titulo', 'El titulo es necesario').notEmpty(),
         check('direccion', 'La dirección es necesaria.').notEmpty(),
