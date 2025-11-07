@@ -16,10 +16,12 @@ const estrategia = new LocalStrategy(
         return done(null, false, { mensaje: 'Datos inválidos' });
       }
 
-      const ok = await bcrypt.compare(contrasenia, usuario.contrasenia).catch(() => false);
-      if (!ok) {
-        return done(null, false, { mensaje: 'Datos inválidos' });
-      }
+      const okHash = usuario.contrasenia.startsWith("$2a$") || usuario.contrasenia.startsWith("$2b$") ? await bcrypt.compare(contrasenia, usuario.contrasenia).catch(() => false)
+    : usuario.contrasenia === contrasenia;
+    if (!okHash) {
+      return done(null, false, { mensaje: "Datos inválidos" });
+    }
+
       const datosLimpios = { //se pasan los datos limpios sin exponer la contra del usuario
         usuario_id: usuario.usuario_id,
         nombre_usuario: usuario.nombre_usuario,
