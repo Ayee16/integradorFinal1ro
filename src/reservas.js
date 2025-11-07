@@ -30,10 +30,10 @@ passport.use(validacion);
 app.use(passport.initialize());
 
 app.use('/api/v1/auth', v1AuthRouter);
-app.use('/api/v1/salones', v1SalonesRutas);
-app.use('/api/v1/usuarios', v1UsuariosRutas);
-app.use('/api/v1/turnos', v1TurnosRutas);
-app.use('/api/v1/servicios', v1ServiciosRutas);
+app.use('/api/v1/salones', passport.authenticate('jwt', { session: false }), v1SalonesRutas);
+app.use('/api/v1/usuarios', passport.authenticate('jwt', { session: false }), v1UsuariosRutas);
+app.use('/api/v1/turnos', passport.authenticate('jwt', { session: false }), v1TurnosRutas);
+app.use('/api/v1/servicios', passport.authenticate('jwt', { session: false }), v1ServiciosRutas);
 
 app.use('/api/v1/reservas', passport.authenticate('jwt', { session: false }), v1ReservasRutas);
 
