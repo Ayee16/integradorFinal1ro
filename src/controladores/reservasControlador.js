@@ -1,4 +1,5 @@
 import ReservasServicio from "../servicios/reservasServicio.js";
+import apicache from "apicache";
 
 export default class ReservasControlador{
 
@@ -151,6 +152,8 @@ export default class ReservasControlador{
             });
         }
 
+        apicache.clear('/api/v1/reservas'); //cualquier cosa borrar
+
         res.json({
             estado: true,
             mensaje: "Reserva modificada correctamente",
@@ -235,6 +238,8 @@ export default class ReservasControlador{
                 }
             });
 
+            apicache.clear('/api/v1/reservas'); //cualquier cosa borrar
+
             res.json({
                 estado: true, 
                 mensaje: 'Reserva creada!',
@@ -263,6 +268,8 @@ export default class ReservasControlador{
                     mensaje: "Reserva no encontrada"
                 });
             }
+
+            apicache.clear('/api/v1/reservas'); //cualquier cosa borrar
 
             res.json({
                 estado: true,

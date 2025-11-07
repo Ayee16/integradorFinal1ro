@@ -2,11 +2,14 @@ import express from 'express';
 import ServiciosControlador from "../../controladores/serviciosControlador.js";
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
+import apicache from 'apicache';//cualquier cosa borrar
 
 const serviciosControlador = new ServiciosControlador();
 const router = express.Router();
 
-router.get('/', serviciosControlador.buscarTodos);
+const cache = apicache.middleware;//cualquier cosa borrar
+
+router.get('/', cache('5 minutes'), serviciosControlador.buscarTodos);//cualquier cosa borrar
 
 router.get('/:servicio_id', serviciosControlador.buscarPorId);
 

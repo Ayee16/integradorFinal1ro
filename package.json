@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Ayee16/integradorFinal1ro#readme",
   "dependencies": {
+    "apicache": "^1.6.3",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "express": "^5.1.0",
