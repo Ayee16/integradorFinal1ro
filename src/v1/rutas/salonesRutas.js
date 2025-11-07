@@ -14,11 +14,11 @@ const cache = apicache.middleware;//cualquier cosa borrar
 
 
 
-router.get('/', cache('5 minutes'), salonesControlador.buscarTodos);//cualquier cosa borrar
+router.get('/', autorizarUsuarios([1,2,3]), cache('5 minutes'), salonesControlador.buscarTodos);//cualquier cosa borrar
 
-router.get('/:salon_id', salonesControlador.buscarPorId);
+router.get('/:salon_id', autorizarUsuarios([1,2,3]), salonesControlador.buscarPorId);
 
-router.put('/:salon_id',
+router.put('/:salon_id', autorizarUsuarios([1,2]),
     [
         check('titulo', 'El titulo es necesario').notEmpty(),
         check('direccion', 'La dirección es necesaria.').notEmpty(),
@@ -38,7 +38,7 @@ router.post('/', autorizarUsuarios([1,2]),
     
     salonesControlador.crear);
 
-router.delete('/:salon_id', salonesControlador.eliminar);
+router.delete('/:salon_id', autorizarUsuarios([1,2]), salonesControlador.eliminar);
 
 
 export {router} ;

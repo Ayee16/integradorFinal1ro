@@ -15,7 +15,7 @@ router.get('/', autorizarUsuarios([1,2,3]), cache('5 minutes'), turnosControlado
 
 router.get('/:turno_id', autorizarUsuarios([1,2,3]), turnosControlador.buscarPorId);
 
-router.post('/', 
+router.post('/', autorizarUsuarios([1,2]),
     [
         check('orden', 'El numero de orden es necesario.').notEmpty(),
         check('hora_desde', 'La hora inicial es necesaria.').notEmpty(),
@@ -26,7 +26,7 @@ router.post('/',
     
     turnosControlador.crear);
 
-router.put('/:turno_id',
+router.put('/:turno_id', autorizarUsuarios([1,2]),
     [
         check('orden', 'El número de orden es necesario.').notEmpty(),
         check('hora_desde', 'La hora inicial es necesaria.').notEmpty(),
@@ -37,6 +37,6 @@ router.put('/:turno_id',
     turnosControlador.modificar
 );
 
-router.delete('/:turno_id', turnosControlador.eliminar);
+router.delete('/:turno_id', autorizarUsuarios([1,2]), turnosControlador.eliminar);
 
 export {router} ;

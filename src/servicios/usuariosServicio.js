@@ -13,6 +13,8 @@ export default class UsuariosServicio {
 
     buscarPorId = (usuario_id) => this.usuarios.buscarPorId(usuario_id);
 
+    buscarCliente = () => this.usuarios.buscarCliente();
+
     modificar = (usuario_id, datos) => {
         return this.usuarios.modificar(usuario_id, datos);
     };

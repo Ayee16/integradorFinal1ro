@@ -2,14 +2,20 @@ import express from 'express';
 import UsuariosControlador from '../../controladores/usuariosControlador.js';
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
+import autorizarUsuarios from '../../middlewares/authUsuarios.js';
+
+
 
 const usuariosControlador = new UsuariosControlador();
 const router = express.Router();
 
-router.get('/', usuariosControlador.buscarTodos);
-router.get('/:usuario_id', usuariosControlador.buscarPorId);
+router.get('/', autorizarUsuarios([1]), usuariosControlador.buscarTodos);
 
-router.put('/:usuario_id',
+router.get('/:usuario_id', autorizarUsuarios([1]), usuariosControlador.buscarPorId);
+
+router.get('/:clientes', autorizarUsuarios([2]), usuariosControlador.buscarCliente);
+
+router.put('/:usuario_id', autorizarUsuarios([1]),
     [check('nombre', 'El nombre es necesario').notEmpty(),
     check('apellido', 'El apellido es necesario.').notEmpty(),
     check('nombre_usuario', 'El nombre de usuario es necesario.').notEmpty(),
@@ -19,7 +25,7 @@ router.put('/:usuario_id',
     usuariosControlador.modificar);
 
 
-router.post('/', 
+router.post('/', autorizarUsuarios([1]), 
     [
         check('nombre', 'El nombre es necesario').notEmpty(),
         check('apellido', 'El apellido es necesario.').notEmpty(),
@@ -31,7 +37,7 @@ router.post('/',
     ],
     usuariosControlador.crear);
 
-router.delete('/:usuario_id', usuariosControlador.eliminar);
+router.delete('/:usuario_id', autorizarUsuarios([1]), usuariosControlador.eliminar);
 
 
 export {router} ;

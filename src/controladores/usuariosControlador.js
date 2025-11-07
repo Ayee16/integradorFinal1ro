@@ -49,6 +49,23 @@ export default class UsuariosControlador{
         }
     }
 
+    buscarCliente = async (req, res) => {
+        try{
+            const usuarios = await this.UsuarioServicio.buscarCliente();
+            res.json({
+                estado: true,
+                datos: usuarios
+            });
+
+        } catch(error){
+        console.log('Error al obtener cliente:', error);
+        res.status(500).json({
+            estado: false,
+            mensaje: 'Error interno del servidor',
+            });
+        }
+    };
+
     modificar = async(req,res) => {
         try {
             const usuario_id = req.params.usuario_id;
