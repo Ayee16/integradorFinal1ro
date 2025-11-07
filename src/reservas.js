@@ -5,6 +5,7 @@ import { setupSwagger } from './swagger/swagger.js';
 import { check } from 'express-validator';
 import { validarCampos } from './middlewares/validarCampos.js';
 import UsuariosControlador from './controladores/usuariosControlador.js';
+import cors from 'cors';
 
 import { router as v1AuthRouter } from './v1/rutas/authRutas.js';
 import { router as v1SalonesRutas } from './v1/rutas/salonesRutas.js';
@@ -15,6 +16,9 @@ import { router as v1ReservasRutas } from './v1/rutas/reservasRutas.js';
 //import reservasRutas from './rutas/reservasRutas.js';
 
 const app = express();
+
+app.use(cors());
+
 app.use(express.json());
 
 const usuariosControlador = new UsuariosControlador();

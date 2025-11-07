@@ -1,12 +1,13 @@
 import express from 'express';
+import multer from 'multer';
 import UsuariosControlador from '../../controladores/usuariosControlador.js';
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
 import autorizarUsuarios from '../../middlewares/authUsuarios.js';
 
 
-
 const usuariosControlador = new UsuariosControlador();
+const upload = multer({ dest: './src/publico' })
 const router = express.Router();
 
 router.get('/', autorizarUsuarios([1]), usuariosControlador.buscarTodos);
@@ -24,6 +25,11 @@ router.put('/:usuario_id', autorizarUsuarios([1]),
     validarCampos,
     usuariosControlador.modificar);
 
+router.put('/fotousuario',
+    autorizarUsuarios([3]),
+    upload.single('foto'),
+    usuariosControlador.modificar
+);
 
 router.post('/registro', 
     [
