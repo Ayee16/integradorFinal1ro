@@ -1,84 +1,238 @@
 body {
-  font-family: Arial, sans-serif;
-  margin: 2rem;
-  background: #f2f2f2;
-  color: #333;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+  background: hsla(0, 0%, 90%, 1);
+  color: hsla(0, 0%, 13%, 1);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-main {
-  display: grid;
-  gap: 2rem;
-  max-width: 720px;
+.container {
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem;
+}
+
+.card {
+  background: hsla(0, 0%, 95%, 1);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 section {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  background: transparent;
+  padding: 0;
 }
 
 h1 {
-  margin-bottom: 1rem;
-  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  color: hsla(219, 96%, 48%, 1);
+  text-align: center;
 }
 
-form {
+header p {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: hsla(0, 0%, 13%, 1);
+}
+
+.form {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  max-width: 360px;
+  gap: 1rem;
+}
+
+.input-group,
+.input-cliente {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+label {
+  font-weight: 600;
+  color: hsla(0, 0%, 13%, 1);
 }
 
 input {
-  padding: 0.65rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
-  box-sizing: border-box;
+  padding: 0.75rem;
+  border: 2px solid hsla(213, 89%, 51%, 0.3);
+  border-radius: 6px;
+  font-size: 1rem;
+  background: hsla(0, 0%, 90%, 1);
+  color: hsla(0, 0%, 13%, 1);
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: hsla(219, 96%, 48%, 1);
+}
+
+input::placeholder {
+  color: hsla(0, 0%, 13%, 0.6);
 }
 
 button {
-  padding: 0.75rem;
+  padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 4px;
-  background: #0077ff;
-  color: #fff;
+  border-radius: 6px;
+  background: hsla(213, 89%, 51%, 1);
+  color: hsla(0, 0%, 95%, 1);
   font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s ease-in-out;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
 }
 
 button:hover {
-  background: #005bcc;
+  background: hsla(208, 89%, 52%, 1);
+  transform: translateY(-1px);
 }
 
-.estado {
-  margin-top: 0.75rem;
-  font-size: 0.95rem;
-}
-
-.estado.ok {
-  color: #0a7a2d;
-}
-
-.estado.error {
-  color: #c62828;
-}
-
-pre {
+.register-btn {
+  background: hsla(202, 89%, 54%, 1);
   margin-top: 1.5rem;
-  padding: 1rem;
-  background: #f7f7f7;
-  border-radius: 6px;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
-  max-width: 540px;
-  overflow-x: auto;
 }
 
-@media (min-width: 900px) {
-  main {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
+.register-btn:hover {
+  background: hsla(208, 89%, 52%, 1);
+}
+
+.status {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.status.ok {
+  color: #0a7a2d;
+  background: rgba(10, 122, 45, 0.1);
+}
+
+.status.error {
+  color: #c62828;
+  background: rgba(198, 40, 40, 0.1);
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid hsla(0, 0%, 13%, 0.2);
+}
+
+.login-link p {
+  margin: 0;
+  color: hsla(0, 0%, 13%, 1);
+}
+
+.login-link a {
+  color: hsla(219, 96%, 48%, 1);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.login-link a:hover {
+  color: hsla(208, 89%, 52%, 1);
+  text-decoration: underline;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  position: relative;
+  background-color: hsla(0, 0%, 95%, 1);
+  margin: 5% auto;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.close {
+  color: hsla(0, 0%, 13%, 1);
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  margin-top: -10px;
+  margin-right: -10px;
+  padding: 10px;
+  transition: color 0.3s ease;
+}
+
+.close:hover,
+.close-login:hover {
+  color: hsla(219, 96%, 48%, 1);
+}
+
+.close-login {
+  color: hsla(0, 0%, 13%, 1);
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  margin-top: -10px;
+  margin-right: -10px;
+  padding: 10px;
+  transition: color 0.3s ease;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .modal-content {
+    margin: 10% auto;
+    padding: 1.5rem;
+    width: 95%;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
   }
 }
