@@ -1,10 +1,12 @@
 import ReservasServicio from "../servicios/reservasServicio.js";
 import apicache from "apicache";
+import InformeServicio from '../servicios/informeServicio.js';
 
 export default class ReservasControlador{
 
     constructor(){
         this.reservasServicio = new ReservasServicio();
+        this.informeServicio = new InformeServicio();
     }
 
     buscarTodos = async (req, res) => {
@@ -285,4 +287,76 @@ export default class ReservasControlador{
         }
     }
 
+    informe = async (req, res) => {
+        try {
+            const formato = req.query.formato?.toLowerCase() || 'pdf';
+            const datosReporte = await this.reservasServicio.buscarDatosReporteCsv();
+
+            if (!Array.isArray(datosReporte) || datosReporte.length === 0) {
+                return res.status(400).json({ estado: false, mensaje: 'No hay reservas para generar el informe' });
+            }
+
+            if (formato === 'pdf') {
+                const bufferPdf = await this.informeServicio.informeReservasPdf(datosReporte);
+                res.setHeader('Content-Type', 'application/pdf');
+                res.setHeader('Content-Disposition', 'inline; filename="reservas.pdf"');
+                return res.send(bufferPdf);
+
+            } else if (formato === 'csv') {
+                const rutaCsv = await this.informeServicio.informeReservasCsv(datosReporte);
+                const rutaAbsoluta = path.resolve(rutaCsv);
+
+                res.setHeader('Content-Type', 'text/csv');
+                res.setHeader('Content-Disposition', 'attachment; filename="reservas.csv"');
+                return res.sendFile(rutaAbsoluta);
+
+            } else {
+                return res.status(400).json({ estado: false, mensaje: 'Formato no soportado. Use pdf o csv' });
+            }
+
+        } catch (error) {
+            console.error('Error generando informe:', error);
+            res.status(500).json({ estado: false, mensaje: 'Error interno del servidor' });
+        }
+    }
 }
+//     informe = async (req, res) => {
+//         try{
+//             const formato = req.query.formato;
+        
+//             if(!formato || !formatosPermitidos.includes(formato)){
+//                 return res.status(400).send({
+//                     estado: "falla",
+//                     mensaje: "formato inválido para el informe."
+//                 })
+//             }
+
+//         //genero informe
+//             const {buffer,path,headers} = await this.reservasServicio.generarInforme(formato);
+
+//         //setear la cabecera de respuesta
+//             res.set(headers)
+
+//             if (formato === 'pdf'){
+//                 res.status(200).end(buffer); //buffer datos binarios q se almacenan
+//             } else if (formato === 'csv'){
+//             //respuesta al cliente y envio el path
+//                 res.status(200).download(path, (err)=> { //formato de descarga de archivo en un path
+//                     if (err) {
+//                         return res.status(500).send({
+//                             estado: "falla",
+//                             mensaje: "no se pudo generar el informe."
+//                         })
+//                     }
+//                 })
+//             }
+//         }catch(error){
+//             console.log(error)
+//             res.status(500).send({
+//                 estado:"Falla", mensaje: "Error interno en servidor."
+//             });
+//         } 
+//     }
+    
+
+
