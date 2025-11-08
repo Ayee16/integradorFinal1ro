@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe de Reservas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        p.fecha {
+            text-align: right;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #fff;
+            padding: 8px;
+            text-align: left;
+        }
+
+        td {
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.8em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <h1>Informe de Reservas</h1>
+    <p class="fecha">Fecha de generación: {{fechaActual}}</p>
+
+    {{#if reservas.length}}
+    <table>
+        <thead>
+            <tr>
+                <th>Mes</th>
+                <th>Total de reservas</th>
+                <th>Total recaudado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each reservas}}
+            <tr>
+                <td>{{this.mes}}</td>
+                <td>{{this.total_reservas}}</td>
+                <td>{{this.total_recaudado}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{else}}
+    <p>No hay reservas para mostrar.</p>
+    {{/if}}
+
+    <div class="footer">
+        2025 Reservas de Casas de Cumpleaños
+    </div>
+</body>
+</html>

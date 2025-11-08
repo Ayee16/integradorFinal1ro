@@ -1,4 +1,5 @@
 import SalonesServicio from "../servicios/salonesServicio.js";
+import apicache from "apicache";
 
 export default class SalonesControlador{
 
@@ -58,9 +59,11 @@ export default class SalonesControlador{
             if (!salonModificado){
                     return res.status(404).json({
                         estado: false,
-                        mensaje: 'salon no encontrado para ser modificado'
+                        mensaje: 'salon no encontrado'
                     })
             }
+
+            apicache.clear('/api/v1/salones'); //cualquier cosa borrar
 
             res.json({
                 estado: true,
@@ -96,6 +99,8 @@ export default class SalonesControlador{
                 })
             }
 
+            apicache.clear('/api/v1/salones'); //cualquier cosa borrar
+
             res.json({
                 estado: true, 
                 mensaje: 'Salón creado!',
@@ -123,6 +128,8 @@ export default class SalonesControlador{
             });
         }
         
+        apicache.clear('/api/v1/salones'); //cualquier cosa borrar
+
         res.json({
             estado: true,
             mensaje: 'Salón eliminado correctamente'

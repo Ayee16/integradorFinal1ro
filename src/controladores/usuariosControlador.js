@@ -49,6 +49,23 @@ export default class UsuariosControlador{
         }
     }
 
+    buscarCliente = async (req, res) => {
+        try{
+            const usuarios = await this.UsuarioServicio.buscarCliente();
+            res.json({
+                estado: true,
+                datos: usuarios
+            });
+
+        } catch(error){
+        console.log('Error al obtener cliente:', error);
+        res.status(500).json({
+            estado: false,
+            mensaje: 'Error interno del servidor',
+            });
+        }
+    };
+
     modificar = async(req,res) => {
         try {
             const usuario_id = req.params.usuario_id;
@@ -168,6 +185,48 @@ export default class UsuariosControlador{
         } catch(err) {
             console.log('Error en DELETE /usuarios/:usuario_id', err);
             res.status(500).json({
+                estado: false,
+                mensaje: 'Error interno del servidor'
+            });
+        }
+    }
+
+    registrarCliente = async (req, res) => {
+        try {
+            const { nombre, apellido, nombre_usuario, contrasenia, celular } = req.body;
+
+            const existe = await this.UsuarioServicio.buscarPorUsuario(nombre_usuario);
+            if (existe) {
+                return res.status(409).json({
+                    estado: false,
+                    mensaje: 'El nombre de usuario ya está en uso'
+                });
+            }
+
+            const nuevoUsuario = await this.UsuarioServicio.crear({
+                nombre,
+                apellido,
+                nombre_usuario,
+                contrasenia,
+                celular,
+                tipo_usuario: 3
+            });
+
+            if (!nuevoUsuario) {
+                return res.status(500).json({
+                    estado: false,
+                    mensaje: 'No se pudo crear el cliente'
+                });
+            }
+
+            return res.status(201).json({
+                estado: true,
+                mensaje: 'Cliente registrado',
+                usuario: nuevoUsuario
+            });
+        } catch (err) {
+            console.log('Error en POST /usuarios/registro-cliente', err);
+            return res.status(500).json({
                 estado: false,
                 mensaje: 'Error interno del servidor'
             });

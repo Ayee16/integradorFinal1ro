@@ -1,0 +1,469 @@
+paths:
+  /api/v1/auth/login:
+    post:
+      summary: Inicia sesión y devuelve un token JWT
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre_usuario
+                - contrasenia
+              properties:
+                nombre_usuario:
+                  type: string
+                  example: admin@correo.com
+                contrasenia:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  token:
+                    type: string
+              example:
+                estado: true
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '401':
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+              example:
+                estado: false
+                mensaje: Datos inválidos
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+
+  /api/v1/usuarios:
+    get:
+      summary: Obtiene una lista de todos los usuarios
+      tags:
+        - usuarios
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  datos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        usuario_id:
+                          type: integer
+                        nombre:
+                          type: string
+                        apellido:
+                          type: string
+                        nombre_usuario:
+                          type: string
+                        tipo_usuario:
+                          type: integer
+              example:
+                estado: true
+                datos:
+                  - usuario_id: 1
+                    nombre: Juan
+                    apellido: Pérez
+                    nombre_usuario: jperez
+                    tipo_usuario: 1
+                  - usuario_id: 1
+                    nombre: María
+                    apellido: González
+                    nombre_usuario: mgonzalez
+                    tipo_usuario: 2
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+    post:
+      summary: Crea un nuevo usuario
+      tags:
+        - usuarios
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre
+                - apellido
+                - nombre_usuario
+                - tipo_usuario
+                - contrasenia
+                - celular
+              properties:
+                nombre:
+                  type: string
+                  description: Nombre del usuario
+                apellido:
+                  type: string
+                  description: Apellido del usuario
+                nombre_usuario:
+                  type: string
+                  description: Nombre de usuario único
+                tipo_usuario:
+                  type: integer
+                  minimum: 1
+                  maximum: 3
+                  description: Tipo de usuario (1, 2 o 3)
+                contrasenia:
+                  type: string
+                  description: Contraseña del usuario
+                celular:
+                  type: integer
+                  description: Número de celular
+            example:
+              nombre: Juan
+              apellido: Pérez
+              nombre_usuario: jperez
+              tipo_usuario: 1
+              contrasenia: password123
+              celular: 1234567890
+      responses:
+        '200':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+                  usuario:
+                    type: object
+                    properties:
+                      usuario:
+                        type: string
+                      tipo_usuario:
+                        type: integer
+                      usuario_id:
+                        type: integer
+        '404':
+          description: Usuario no creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+  /api/v1/usuarios/{usuario_id}:
+    get:
+      summary: Obtiene un usuario por su ID
+      tags:
+        - usuarios
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: usuario_id
+          in: path
+          required: true
+          description: ID del usuario a obtener
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  usuario:
+                    type: object
+                    properties:
+                      usuario:
+                        type: string
+                        description: Nombre completo del usuario (nombre + apellido)
+                      tipo_usuario:
+                        type: integer
+                      usuario_id:
+                        type: integer
+              example:
+                estado: true
+                usuario:
+                  usuario: Juan Pérez
+                  tipo_usuario: 1
+                  usuario_id: 1
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+    put:
+      summary: Modifica un usuario existente
+      tags:
+        - usuarios
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: usuario_id
+          in: path
+          required: true
+          description: ID del usuario a modificar
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                  description: Nombre del usuario
+                apellido:
+                  type: string
+                  description: Apellido del usuario
+                nombre_usuario:
+                  type: string
+                  description: Nombre de usuario único
+                tipo_usuario:
+                  type: integer
+                  minimum: 1
+                  maximum: 3
+                  description: Tipo de usuario (1, 2 o 3)
+                celular:
+                  type: integer
+                  description: Número de celular
+            example:
+              nombre: Juan
+              apellido: Pérez
+              nombre_usuario: jperez_actualizado
+              tipo_usuario: 2
+              celular: 9876543210
+      responses:
+        '200':
+          description: Usuario modificado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+                  usuario:
+                    type: object
+                    properties:
+                      usuario:
+                        type: string
+                      tipo_usuario:
+                        type: integer
+                      usuario_id:
+                        type: integer
+        '404':
+          description: Usuario no encontrado para ser modificado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+    delete:
+      summary: Elimina un usuario (marca como inactivo)
+      tags:
+        - usuarios
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: usuario_id
+          in: path
+          required: true
+          description: ID del usuario a eliminar
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuario eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+              example:
+                estado: true
+                mensaje: Usuario eliminado
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  mensaje:
+                    type: string
+  /api/v1/usuarios/clientes:
+    get:
+      summary: Obtiene la lista de clientes (tipo_usuario = 3)
+      tags:
+        - usuarios
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  datos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        usuario_id:
+                          type: integer
+                        nombre:
+                          type: string
+                        apellido:
+                          type: string
+                        nombre_usuario:
+                          type: string
+                        tipo_usuario:
+                          type: integer
+            example:
+              estado: true
+              datos:
+                - usuario_id: 5
+                  nombre: Laura
+                  apellido: Díaz
+                  nombre_usuario: laura@example.com
+                  tipo_usuario: 3
+      '403':
+        description: Acceso denegado
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                estado:
+                  type: string
+                mensaje:
+                  type: string
+      '500':
+        description: Error interno del servidor
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                estado:
+                  type: boolean
+                mensaje:
+                  type: string
