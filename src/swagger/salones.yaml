@@ -1,12 +1,14 @@
 paths:
   /api/v1/salones:
     get:
-      summary: Obtiene una lista de todos los salones
-      tags:
-        - salones
+      summary: Listado de salones
+      description: Devuelve todos los salones activos. Requiere token JWT (roles 1, 2 o 3).
+      tags: [salones]
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: Lista de salones
+          description: Salones obtenidos correctamente
           content:
             application/json:
               schema:
@@ -17,66 +19,25 @@ paths:
                   datos:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        salon_id:
-                          type: integer
-                        titulo:
-                          type: string
-                        direccion:
-                          type: string
-                        capacidad:
-                          type: integer
-                        importe:
-                          type: number
-                          format: float
-                        activo:
-                          type: integer
-                        creado:
-                          type: string
-                          format: date-time
-                        modificado:
-                          type: string
-                          format: date-time
-              examples:
-                ejemplo1:
-                  summary: Ejemplo de respuesta exitosa
-                  value:
-                    - salon_id: 1
-                      titulo: Principal
-                      direccion: San Lorenzo 1000
-                      capacidad: 200
-                      importe: 95000.00
-                      activo: 1
-                      creado: 2025-08-19T21:51:22.000Z
-                      modificado: 2025-08-19T21:51:22.000Z
-                    - salon_id: 1
-                      titulo: Secundario
-                      direccion: San Lorenzo 1000
-                      capacidad: 70
-                      importe: 7000.00
-                      activo: 1
-                      creado: 2025-08-19T21:51:22.000Z
-                      modificado: 2025-08-19T21:51:22.000Z
-                ejemplo2:
-                  summary: Ejemplo de error en la solicitud
-                  value:
-                    - Cannot GET /api/v1/salonesssss
+                      $ref: '#/components/schemas/Salon'
+              example:
+                estado: true
+                datos:
+                  - salon_id: 1
+                    titulo: "Principal"
+                    direccion: "San Lorenzo 1000"
+                    capacidad: 200
+                    importe: 95000
+        '401':
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos para acceder
         '500':
           description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
     post:
-      summary: Crea un nuevo salón
-      tags:
-        - salones
+      summary: Crear salón
+      description: Solo roles 1 y 2. Valida título, dirección, capacidad e importe.
+      tags: [salones]
       security:
         - bearerAuth: []
       requestBody:
@@ -84,36 +45,15 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - titulo
-                - direccion
-                - capacidad
-                - importe
-              properties:
-                titulo:
-                  type: string
-                  description: Título del salón
-                direccion:
-                  type: string
-                  description: Dirección del salón
-                capacidad:
-                  type: integer
-                  minimum: 1
-                  description: Capacidad del salón
-                importe:
-                  type: number
-                  format: float
-                  minimum: 0
-                  description: Importe del salón
+              $ref: '#/components/schemas/SalonCreate'
             example:
-              titulo: Principal
-              direccion: San Lorenzo 1000
-              capacidad: 200
-              importe: 95000.00
+              titulo: "Nuevo salón"
+              direccion: "Av. Siempre Viva 742"
+              capacidad: 80
+              importe: 45000
       responses:
         '200':
-          description: Salón creado exitosamente
+          description: Salón creado
           content:
             application/json:
               schema:
@@ -124,64 +64,28 @@ paths:
                   mensaje:
                     type: string
                   salon:
-                    type: object
-                    properties:
-                      titulo:
-                        type: string
-                      direccion:
-                        type: string
-                      capacidad:
-                        type: integer
-                      importe:
-                        type: number
-                        format: float
-                      activo:
-                        type: integer
+                    $ref: '#/components/schemas/Salon'
+        '400':
+          description: Error de validación de datos
         '401':
-          description: Token inválido o ausente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-        '404':
-          description: Salón no creado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos para crear
         '500':
           description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
   /api/v1/salones/{salon_id}:
+    parameters:
+      - name: salon_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
-      summary: Obtiene un salón por su ID
-      tags:
-        - salones
-      parameters:
-        - name: salon_id
-          in: path
-          required: true
-          description: ID del salón a obtener
-          schema:
-            type: integer
+      summary: Obtener salón por ID
+      description: Requiere roles 1, 2 o 3.
+      tags: [salones]
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Salón encontrado
@@ -193,92 +97,30 @@ paths:
                   estado:
                     type: boolean
                   salon:
-                    type: object
-                    properties:
-                      titulo:
-                        type: string
-                      direccion:
-                        type: string
-                      capacidad:
-                        type: integer
-                      importe:
-                        type: number
-                        format: float
-                      activo:
-                        type: integer
-              example:
-                estado: true
-                salon:
-                  titulo: Principal
-                  direccion: San Lorenzo 1000
-                  capacidad: 200
-                  importe: 95000.00
-                  activo: 1
+                    $ref: '#/components/schemas/Salon'
+        '401':
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos para consultar
         '404':
           description: Salón no encontrado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
         '500':
           description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
     put:
-      summary: Modifica un salón existente
-      tags:
-        - salones
+      summary: Modificar salón
+      description: Solo roles 1 y 2. Valida título, dirección, capacidad e importe.
+      tags: [salones]
       security:
         - bearerAuth: []
-      parameters:
-        - name: salon_id
-          in: path
-          required: true
-          description: ID del salón a modificar
-          schema:
-            type: integer
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                titulo:
-                  type: string
-                  description: Título del salón
-                direccion:
-                  type: string
-                  description: Dirección del salón
-                capacidad:
-                  type: integer
-                  minimum: 1
-                  description: Capacidad del salón
-                importe:
-                  type: number
-                  format: float
-                  minimum: 0
-                  description: Importe del salón
-            example:
-              titulo: Principal Actualizado
-              direccion: San Lorenzo 1500
-              capacidad: 250
-              importe: 100000.00
+              $ref: '#/components/schemas/SalonCreate'
       responses:
         '200':
-          description: Salón modificado exitosamente
+          description: Salón actualizado
           content:
             application/json:
               schema:
@@ -289,93 +131,26 @@ paths:
                   mensaje:
                     type: string
                   salon:
-                    type: object
-                    properties:
-                      titulo:
-                        type: string
-                      direccion:
-                        type: string
-                      capacidad:
-                        type: integer
-                      importe:
-                        type: number
-                        format: float
-                      activo:
-                        type: integer
+                    $ref: '#/components/schemas/Salon'
+        '400':
+          description: Error de validación
         '401':
-          description: Token inválido o ausente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-        '404':
-          description: Salón no encontrado para ser modificado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-    delete:
-      summary: Elimina un salón (marca como inactivo)
-      tags:
-        - salones
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: salon_id
-          in: path
-          required: true
-          description: ID del salón a eliminar
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Salón eliminado exitosamente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-              example:
-                estado: true
-                mensaje: Salón eliminado correctamente
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos para modificar
         '404':
           description: Salón no encontrado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
         '500':
           description: Error interno del servidor
+    delete:
+      summary: Eliminar salón (baja lógica)
+      description: Solo roles 1 y 2.
+      tags: [salones]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Salón eliminado
           content:
             application/json:
               schema:
@@ -386,13 +161,44 @@ paths:
                   mensaje:
                     type: string
         '401':
-          description: Token inválido o ausente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos para eliminar
+        '404':
+          description: Salón no encontrado
+        '500':
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Salon:
+      type: object
+      properties:
+        salon_id:
+          type: integer
+        titulo:
+          type: string
+        direccion:
+          type: string
+        capacidad:
+          type: integer
+        importe:
+          type: number
+        activo:
+          type: integer
+    SalonCreate:
+      type: object
+      required:
+        - titulo
+        - direccion
+        - capacidad
+        - importe
+      properties:
+        titulo:
+          type: string
+        direccion:
+          type: string
+        capacidad:
+          type: integer
+        importe:
+          type: number

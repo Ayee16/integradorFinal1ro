@@ -1,25 +1,18 @@
 paths:
   /api/v1/auth/login:
     post:
-      summary: Inicia sesión y devuelve un token JWT
-      tags:
-        - auth
+      summary: Iniciar sesión
+      description: Valida credenciales con Passport Local y devuelve un JWT válido por una hora.
+      tags: [auth]
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - nombre_usuario
-                - contrasenia
-              properties:
-                nombre_usuario:
-                  type: string
-                  example: admin@correo.com
-                contrasenia:
-                  type: string
-                  example: password123
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              nombre_usuario: admin@correo.com
+              contrasenia: 123456
       responses:
         '200':
           description: Login exitoso
@@ -32,141 +25,31 @@ paths:
                     type: boolean
                   token:
                     type: string
-              example:
-                estado: true
-                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
         '401':
           description: Credenciales inválidas
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-              example:
-                estado: false
-                mensaje: Datos inválidos
         '500':
           description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
 
-  /api/v1/usuarios:
-    get:
-      summary: Obtiene una lista de todos los usuarios
-      tags:
-        - usuarios
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Lista de usuarios
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  datos:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        usuario_id:
-                          type: integer
-                        nombre:
-                          type: string
-                        apellido:
-                          type: string
-                        nombre_usuario:
-                          type: string
-                        tipo_usuario:
-                          type: integer
-              example:
-                estado: true
-                datos:
-                  - usuario_id: 1
-                    nombre: Juan
-                    apellido: Pérez
-                    nombre_usuario: jperez
-                    tipo_usuario: 1
-                  - usuario_id: 1
-                    nombre: María
-                    apellido: González
-                    nombre_usuario: mgonzalez
-                    tipo_usuario: 2
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
+  /api/v1/usuarios/registro:
     post:
-      summary: Crea un nuevo usuario
-      tags:
-        - usuarios
-      security:
-        - bearerAuth: []
+      summary: Registrar cliente (público)
+      description: Crea un usuario con `tipo_usuario = 3`. No requiere autenticación.
+      tags: [usuarios]
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - nombre
-                - apellido
-                - nombre_usuario
-                - tipo_usuario
-                - contrasenia
-                - celular
-              properties:
-                nombre:
-                  type: string
-                  description: Nombre del usuario
-                apellido:
-                  type: string
-                  description: Apellido del usuario
-                nombre_usuario:
-                  type: string
-                  description: Nombre de usuario único
-                tipo_usuario:
-                  type: integer
-                  minimum: 1
-                  maximum: 3
-                  description: Tipo de usuario (1, 2 o 3)
-                contrasenia:
-                  type: string
-                  description: Contraseña del usuario
-                celular:
-                  type: integer
-                  description: Número de celular
+              $ref: '#/components/schemas/UsuarioRegistroPublico'
             example:
-              nombre: Juan
-              apellido: Pérez
-              nombre_usuario: jperez
-              tipo_usuario: 1
-              contrasenia: password123
-              celular: 1234567890
+              nombre: Laura
+              apellido: Díaz
+              nombre_usuario: laura@example.com
+              contrasenia: 123456
+              celular: 1122334455
       responses:
-        '200':
-          description: Usuario creado exitosamente
+        '201':
+          description: Cliente registrado
           content:
             application/json:
               schema:
@@ -177,27 +60,63 @@ paths:
                   mensaje:
                     type: string
                   usuario:
-                    type: object
-                    properties:
-                      usuario:
-                        type: string
-                      tipo_usuario:
-                        type: integer
-                      usuario_id:
-                        type: integer
-        '404':
-          description: Usuario no creado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
+                    $ref: '#/components/schemas/Usuario'
+        '400':
+          description: Error de validación
+        '409':
+          description: El correo ya está registrado
         '500':
           description: Error interno del servidor
+
+  /api/v1/usuarios:
+    get:
+      summary: Listado de usuarios
+      description: Solo administradores (rol 1).
+      tags: [usuarios]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Usuarios activos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado:
+                    type: boolean
+                  datos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Usuario'
+        '401':
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos
+        '500':
+          description: Error interno del servidor
+    post:
+      summary: Crear usuario (administración)
+      description: Solo rol 1. Permite definir tipo de usuario 1, 2 o 3.
+      tags: [usuarios]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioCreate'
+            example:
+              nombre: Ana
+              apellido: López
+              nombre_usuario: ana@example.com
+              tipo_usuario: 2
+              contrasenia: 123456
+              celular: 1166778899
+      responses:
+        '200':
+          description: Usuario creado
           content:
             application/json:
               schema:
@@ -207,20 +126,30 @@ paths:
                     type: boolean
                   mensaje:
                     type: string
+                  usuario:
+                    $ref: '#/components/schemas/Usuario'
+        '400':
+          description: Error de validación
+        '401':
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos
+        '500':
+          description: Error interno del servidor
+
   /api/v1/usuarios/{usuario_id}:
+    parameters:
+      - name: usuario_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
-      summary: Obtiene un usuario por su ID
-      tags:
-        - usuarios
+      summary: Obtener usuario por ID
+      description: Solo rol 1.
+      tags: [usuarios]
       security:
         - bearerAuth: []
-      parameters:
-        - name: usuario_id
-          in: path
-          required: true
-          description: ID del usuario a obtener
-          schema:
-            type: integer
       responses:
         '200':
           description: Usuario encontrado
@@ -232,89 +161,30 @@ paths:
                   estado:
                     type: boolean
                   usuario:
-                    type: object
-                    properties:
-                      usuario:
-                        type: string
-                        description: Nombre completo del usuario (nombre + apellido)
-                      tipo_usuario:
-                        type: integer
-                      usuario_id:
-                        type: integer
-              example:
-                estado: true
-                usuario:
-                  usuario: Juan Pérez
-                  tipo_usuario: 1
-                  usuario_id: 1
+                    $ref: '#/components/schemas/UsuarioDetalle'
+        '401':
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos
         '404':
           description: Usuario no encontrado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
         '500':
           description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
     put:
-      summary: Modifica un usuario existente
-      tags:
-        - usuarios
+      summary: Modificar usuario
+      description: Solo rol 1. Valida nombre, apellido, correo, tipo_usuario (1-3) y celular numérico.
+      tags: [usuarios]
       security:
         - bearerAuth: []
-      parameters:
-        - name: usuario_id
-          in: path
-          required: true
-          description: ID del usuario a modificar
-          schema:
-            type: integer
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                nombre:
-                  type: string
-                  description: Nombre del usuario
-                apellido:
-                  type: string
-                  description: Apellido del usuario
-                nombre_usuario:
-                  type: string
-                  description: Nombre de usuario único
-                tipo_usuario:
-                  type: integer
-                  minimum: 1
-                  maximum: 3
-                  description: Tipo de usuario (1, 2 o 3)
-                celular:
-                  type: integer
-                  description: Número de celular
-            example:
-              nombre: Juan
-              apellido: Pérez
-              nombre_usuario: jperez_actualizado
-              tipo_usuario: 2
-              celular: 9876543210
+              $ref: '#/components/schemas/UsuarioUpdateAdmin'
       responses:
         '200':
-          description: Usuario modificado exitosamente
+          description: Usuario actualizado
           content:
             application/json:
               schema:
@@ -325,96 +195,45 @@ paths:
                   mensaje:
                     type: string
                   usuario:
-                    type: object
-                    properties:
-                      usuario:
-                        type: string
-                      tipo_usuario:
-                        type: integer
-                      usuario_id:
-                        type: integer
-        '404':
-          description: Usuario no encontrado para ser modificado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-    delete:
-      summary: Elimina un usuario (marca como inactivo)
-      tags:
-        - usuarios
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: usuario_id
-          in: path
-          required: true
-          description: ID del usuario a eliminar
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Usuario eliminado exitosamente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-              example:
-                estado: true
-                mensaje: Usuario eliminado
+                    $ref: '#/components/schemas/Usuario'
+        '400':
+          description: Error de validación o campos no permitidos
+        '401':
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos
         '404':
           description: Usuario no encontrado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
         '500':
           description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-  /api/v1/usuarios/clientes:
-    get:
-      summary: Obtiene la lista de clientes (tipo_usuario = 3)
-      tags:
-        - usuarios
+    delete:
+      summary: Eliminar usuario (baja lógica)
+      description: Solo rol 1.
+      tags: [usuarios]
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: Lista de clientes
+          description: Usuario eliminado
+        '401':
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /api/v1/usuarios/clientes:
+    get:
+      summary: Listado de clientes
+      description: Solo rol 2 (empleado) según el middleware de autorización.
+      tags: [usuarios]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Clientes activos (tipo_usuario = 3)
           content:
             application/json:
               schema:
@@ -425,45 +244,146 @@ paths:
                   datos:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        usuario_id:
-                          type: integer
-                        nombre:
-                          type: string
-                        apellido:
-                          type: string
-                        nombre_usuario:
-                          type: string
-                        tipo_usuario:
-                          type: integer
-            example:
-              estado: true
-              datos:
-                - usuario_id: 5
-                  nombre: Laura
-                  apellido: Díaz
-                  nombre_usuario: laura@example.com
-                  tipo_usuario: 3
-      '403':
-        description: Acceso denegado
+                      $ref: '#/components/schemas/Usuario'
+        '401':
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos
+        '500':
+          description: Error interno del servidor
+
+  /api/v1/usuarios/fotousuario:
+    put:
+      summary: Actualizar datos del usuario con carga de foto
+      description: Disponible para rol 3. Recibe un archivo `foto` y campos opcionales del perfil. (Actualmente guarda el archivo en `./src/publico`).
+      tags: [usuarios]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
-                estado:
+                foto:
                   type: string
-                mensaje:
+                  format: binary
+                nombre:
                   type: string
-      '500':
-        description: Error interno del servidor
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                estado:
-                  type: boolean
-                mensaje:
+                apellido:
                   type: string
+                nombre_usuario:
+                  type: string
+                contrasenia:
+                  type: string
+                tipo_usuario:
+                  type: integer
+                celular:
+                  type: string
+      responses:
+        '200':
+          description: Usuario actualizado (cuando la modificación es exitosa)
+        '400':
+          description: No se enviaron campos válidos
+        '401':
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos
+        '404':
+          description: Usuario no encontrado para modificar
+        '500':
+          description: Error interno del servidor
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - nombre_usuario
+        - contrasenia
+      properties:
+        nombre_usuario:
+          type: string
+          format: email
+        contrasenia:
+          type: string
+    Usuario:
+      type: object
+      properties:
+        usuario_id:
+          type: integer
+        nombre:
+          type: string
+        apellido:
+          type: string
+        nombre_usuario:
+          type: string
+        tipo_usuario:
+          type: integer
+    UsuarioDetalle:
+      type: object
+      properties:
+        usuario:
+          type: string
+          description: Nombre completo
+        tipo_usuario:
+          type: integer
+        usuario_id:
+          type: integer
+        nombre_usuario:
+          type: string
+    UsuarioCreate:
+      type: object
+      required:
+        - nombre
+        - apellido
+        - nombre_usuario
+        - tipo_usuario
+        - contrasenia
+        - celular
+      properties:
+        nombre:
+          type: string
+        apellido:
+          type: string
+        nombre_usuario:
+          type: string
+          format: email
+        tipo_usuario:
+          type: integer
+          minimum: 1
+          maximum: 3
+        contrasenia:
+          type: string
+        celular:
+          type: string
+    UsuarioUpdateAdmin:
+      allOf:
+        - $ref: '#/components/schemas/UsuarioCreate'
+      required:
+        - nombre
+        - apellido
+        - nombre_usuario
+        - tipo_usuario
+        - celular
+    UsuarioRegistroPublico:
+      type: object
+      required:
+        - nombre
+        - apellido
+        - nombre_usuario
+        - contrasenia
+        - celular
+      properties:
+        nombre:
+          type: string
+        apellido:
+          type: string
+        nombre_usuario:
+          type: string
+          format: email
+        contrasenia:
+          type: string
+        celular:
+          type: string

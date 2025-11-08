@@ -1,12 +1,14 @@
 paths:
   /api/v1/turnos:
     get:
-      summary: Obtiene una lista de todos los turnos
-      tags:
-        - turnos
+      summary: Listado de turnos
+      description: Devuelve los turnos activos. Requiere JWT (roles 1, 2 o 3).
+      tags: [turnos]
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: Lista de turnos
+          description: Turnos obtenidos correctamente
           content:
             application/json:
               schema:
@@ -17,48 +19,17 @@ paths:
                   datos:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        turno_id:
-                          type: integer
-                        orden:
-                          type: integer
-                        hora_desde:
-                          type: string
-                          format: time
-                        hora_hasta:
-                          type: string
-                          format: time
-                        activo:
-                          type: integer
-              example:
-                estado: true
-                datos:
-                  - turno_id: 1
-                    orden: 1
-                    hora_desde: 08:00:00
-                    hora_hasta: 12:00:00
-                    activo: 1
-                  - turno_id: 1
-                    orden: 2
-                    hora_desde: 14:00:00
-                    hora_hasta: 18:00:00
-                    activo: 1
+                      $ref: '#/components/schemas/Turno'
+        '401':
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos para acceder
         '500':
           description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
     post:
-      summary: Crea un nuevo turno
-      tags:
-        - turnos
+      summary: Crear turno
+      description: Solo roles 1 y 2. Valida orden, hora_desde, hora_hasta y activo=1.
+      tags: [turnos]
       security:
         - bearerAuth: []
       requestBody:
@@ -66,40 +37,15 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - orden
-                - hora_desde
-                - hora_hasta
-                - activo
-              properties:
-                orden:
-                  type: integer
-                  description: Número de orden del turno
-                  example: 1
-                hora_desde:
-                  type: string
-                  format: time
-                  description: Hora de inicio del turno (formato HH:MM:SS)
-                  example: 08:00:00
-                hora_hasta:
-                  type: string
-                  format: time
-                  description: Hora de finalización del turno (formato HH:MM:SS)
-                  example: 12:00:00
-                activo:
-                  type: integer
-                  minimum: 1
-                  description: Estado activo del turno (debe ser 1)
-                  example: 1
+              $ref: '#/components/schemas/TurnoCreate'
             example:
               orden: 1
-              hora_desde: 08:00:00
-              hora_hasta: 12:00:00
+              hora_desde: "08:00:00"
+              hora_hasta: "12:00:00"
               activo: 1
       responses:
         '200':
-          description: Turno creado exitosamente
+          description: Turno creado
           content:
             application/json:
               schema:
@@ -110,70 +56,28 @@ paths:
                   mensaje:
                     type: string
                   turno:
-                    type: object
-                    properties:
-                      turno_id:
-                        type: integer
-                      orden:
-                        type: integer
-                      activo:
-                        type: integer
-                      horario:
-                        type: string
-                        description: Concatenación de hora_desde y hora_hasta
-              example:
-                estado: true
-                mensaje: Turno creado!
-                turno:
-                  turno_id: 1
-                  orden: 1
-                  activo: 1
-                  horario: 08:00:00-12:00:00
+                    $ref: '#/components/schemas/TurnoRespuesta'
+        '400':
+          description: Error de validación
         '401':
-          description: Token inválido o ausente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-        '404':
-          description: Turno no creado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos para crear
         '500':
           description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
   /api/v1/turnos/{turno_id}:
+    parameters:
+      - name: turno_id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
-      summary: Obtiene un turno por su ID
-      tags:
-        - turnos
-      parameters:
-        - name: turno_id
-          in: path
-          required: true
-          description: ID del turno a obtener
-          schema:
-            type: integer
+      summary: Obtener turno por ID
+      description: Roles 1, 2 o 3.
+      tags: [turnos]
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Turno encontrado
@@ -184,100 +88,31 @@ paths:
                 properties:
                   estado:
                     type: boolean
-                  salon:
-                    type: object
-                    properties:
-                      turno_id:
-                        type: integer
-                      orden:
-                        type: integer
-                      activo:
-                        type: integer
-                      horario:
-                        type: string
-                        description: Concatenación de hora_desde y hora_hasta
-              example:
-                estado: true
-                salon:
-                  turno_id: 1
-                  orden: 1
-                  activo: 1
-                  horario: 08:00:00-12:00:00
+                  turno:
+                    $ref: '#/components/schemas/Turno'
+        '401':
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos para consultar
         '404':
           description: Turno no encontrado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
         '500':
           description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
     put:
-      summary: Modifica un turno existente
-      tags:
-        - turnos
+      summary: Modificar turno
+      description: Solo roles 1 y 2. Valida orden, horas y activo (0 o 1).
+      tags: [turnos]
       security:
         - bearerAuth: []
-      parameters:
-        - name: turno_id
-          in: path
-          required: true
-          description: ID del turno a modificar
-          schema:
-            type: integer
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - orden
-                - hora_desde
-                - hora_hasta
-                - activo
-              properties:
-                orden:
-                  type: integer
-                  description: Número de orden del turno
-                  example: 1
-                hora_desde:
-                  type: string
-                  format: time
-                  description: Hora de inicio del turno (formato HH:MM:SS)
-                  example: 08:00:00
-                hora_hasta:
-                  type: string
-                  format: time
-                  description: Hora de finalización del turno (formato HH:MM:SS)
-                  example: 12:00:00
-                activo:
-                  type: integer
-                  minimum: 0
-                  maximum: 1
-                  description: Estado activo del turno (0 o 1)
-                  example: 1
-            example:
-              orden: 1
-              hora_desde: 08:00:00
-              hora_hasta: 12:00:00
-              activo: 1
+              $ref: '#/components/schemas/TurnoUpdate'
       responses:
         '200':
-          description: Turno modificado exitosamente
+          description: Turno actualizado
           content:
             application/json:
               schema:
@@ -288,109 +123,26 @@ paths:
                   mensaje:
                     type: string
                   turno:
-                    type: object
-                    properties:
-                      turno_id:
-                        type: integer
-                      orden:
-                        type: integer
-                      activo:
-                        type: integer
-                      horario:
-                        type: string
-              example:
-                estado: true
-                mensaje: Turno modificado correctamente
-                turno:
-                  turno_id: 1
-                  orden: 1
-                  activo: 1
-                  horario: 08:00:00-12:00:00
+                    $ref: '#/components/schemas/TurnoRespuesta'
         '400':
-          description: No se proporcionaron datos para modificar
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
+          description: Error de validación
         '401':
-          description: Token inválido o ausente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos para modificar
         '404':
           description: Turno no encontrado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
         '500':
           description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
     delete:
-      summary: Elimina un turno (marca como inactivo)
-      tags:
-        - turnos
+      summary: Eliminar turno (baja lógica)
+      description: Solo roles 1 y 2.
+      tags: [turnos]
       security:
         - bearerAuth: []
-      parameters:
-        - name: turno_id
-          in: path
-          required: true
-          description: ID del turno a eliminar
-          schema:
-            type: integer
       responses:
         '200':
-          description: Turno eliminado exitosamente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-              example:
-                estado: true
-                mensaje: Turno eliminado
-        '404':
-          description: Turno no encontrado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
-        '500':
-          description: Error interno del servidor
+          description: Turno eliminado
           content:
             application/json:
               schema:
@@ -401,14 +153,66 @@ paths:
                   mensaje:
                     type: string
         '401':
-          description: Token inválido o ausente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  estado:
-                    type: boolean
-                  mensaje:
-                    type: string
+          description: Token ausente o inválido
+        '403':
+          description: Rol sin permisos para eliminar
+        '404':
+          description: Turno no encontrado
+        '500':
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Turno:
+      type: object
+      properties:
+        turno_id:
+          type: integer
+        orden:
+          type: integer
+        hora_desde:
+          type: string
+          format: time
+        hora_hasta:
+          type: string
+          format: time
+        activo:
+          type: integer
+    TurnoCreate:
+      type: object
+      required:
+        - orden
+        - hora_desde
+        - hora_hasta
+        - activo
+      properties:
+        orden:
+          type: integer
+        hora_desde:
+          type: string
+          format: time
+        hora_hasta:
+          type: string
+          format: time
+        activo:
+          type: integer
+    TurnoUpdate:
+      allOf:
+        - $ref: '#/components/schemas/TurnoCreate'
+      required:
+        - orden
+        - hora_desde
+        - hora_hasta
+        - activo
+    TurnoRespuesta:
+      type: object
+      properties:
+        turno_id:
+          type: integer
+        orden:
+          type: integer
+        horario:
+          type: string
+        activo:
+          type: integer
 
