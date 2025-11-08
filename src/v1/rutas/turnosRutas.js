@@ -9,9 +9,9 @@ import autorizarUsuarios from '../../middlewares/authUsuarios.js';
 const turnosControlador = new TurnosControlador();
 const router = express.Router();
 
-const cache = apicache.middleware;//cualquier cosa borrar
+const cache = apicache.middleware;
 
-router.get('/', autorizarUsuarios([1,2,3]), cache('5 minutes'), turnosControlador.buscarTodos);//cualquier cosa borrar
+router.get('/', autorizarUsuarios([1,2,3]), cache('5 minutes'), turnosControlador.buscarTodos);
 
 router.get('/:turno_id', autorizarUsuarios([1,2,3]), turnosControlador.buscarPorId);
 

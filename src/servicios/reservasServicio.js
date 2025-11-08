@@ -103,10 +103,10 @@ export default class ReservasServicio {
 
     generarInforme = async (formato) => {
     if (formato === 'pdf') {
-        // 🔹 Obtener datos del procedimiento almacenado
+        
         const datosReporte = await this.generarReporteCSV();
 
-        // 🔹 Usar tu helper que genera el PDF
+        
         const pdf = await this.informes.informeReservasPdf(datosReporte);
         
         return {
@@ -118,10 +118,10 @@ export default class ReservasServicio {
         };
 
     } else if (formato === 'csv') {
-        // 🔹 Obtener datos del procedimiento almacenado
+        
         const datosReporte = await this.generarReporteCSV();
 
-        // 🔹 Usar tu helper que genera el CSV
+        
         const csv = await this.informes.informeReservasCsv(datosReporte);
         
         return {

@@ -7,7 +7,7 @@ export default class SalonesControlador{
         this.SalonesServicio = new SalonesServicio();
     }
 
-    buscarTodos = async (req, res) => { //1:12
+    buscarTodos = async (req, res) => { 
         try{
             const salones = await this.SalonesServicio.buscarTodos();
             res.json({
@@ -63,7 +63,7 @@ export default class SalonesControlador{
                     })
             }
 
-            apicache.clear('/api/v1/salones'); //cualquier cosa borrar
+            apicache.clear('/api/v1/salones');
 
             res.json({
                 estado: true,
@@ -99,7 +99,7 @@ export default class SalonesControlador{
                 })
             }
 
-            apicache.clear('/api/v1/salones'); //cualquier cosa borrar
+            apicache.clear('/api/v1/salones');
 
             res.json({
                 estado: true, 
@@ -128,7 +128,7 @@ export default class SalonesControlador{
             });
         }
         
-        apicache.clear('/api/v1/salones'); //cualquier cosa borrar
+        apicache.clear('/api/v1/salones');
 
         res.json({
             estado: true,

@@ -20,7 +20,7 @@ export default class ReservasServicios {
         return;
     }
 
-    //elimino los anteriores
+    
     await this.eliminarPorReserva(reserva_id);
 
     const sql = "INSERT INTO reservas_servicios (reserva_id, servicio_id, importe) VALUES (?, ?, ?)";

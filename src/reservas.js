@@ -1,5 +1,7 @@
 import express from 'express';
 import passport from 'passport';
+import cors from 'cors';
+
 import { estrategia, validacion } from './config/passport.js';
 import { setupSwagger } from './swagger/swagger.js';
 import { check } from 'express-validator';
@@ -12,9 +14,9 @@ import { router as v1UsuariosRutas } from './v1/rutas/usuariosRutas.js';
 import { router as v1TurnosRutas } from './v1/rutas/turnosRutas.js';
 import { router as v1ServiciosRutas } from './v1/rutas/serviciosRutas.js';
 import { router as v1ReservasRutas } from './v1/rutas/reservasRutas.js';
-//import reservasRutas from './rutas/reservasRutas.js';
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 const usuariosControlador = new UsuariosControlador();

@@ -4,9 +4,9 @@ import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
 import autorizarUsuarios from '../../middlewares/authUsuarios.js';
 import { generarInforme } from '../../controladores/informeControlador.js';
-import apicache from 'apicache'; //cualquier cosa borrar
+import apicache from 'apicache'; 
 
-const cache = apicache.middleware; //cualquier cosa borrar
+const cache = apicache.middleware; 
 const reservasControlador = new ReservasControlador();
 const router = express.Router();
 
@@ -17,7 +17,7 @@ router.get('/test-informe', (req, res) => {
 
 router.get('/informe', autorizarUsuarios([1]), generarInforme);
 
-router.get('/', autorizarUsuarios([1,2,3]) , cache('5 minutes'), reservasControlador.buscarTodos); //cualquier cosa borrar
+router.get('/', autorizarUsuarios([1,2,3]) , cache('5 minutes'), reservasControlador.buscarTodos); 
 
 router.get('/:reserva_id', autorizarUsuarios([1,2,3]) , reservasControlador.buscarPorId);
 

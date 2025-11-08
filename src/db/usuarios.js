@@ -11,16 +11,16 @@ export default class Usuarios {
 
     buscarPorId = async (usuario_id) => {
         const sql = `SELECT CONCAT(u.nombre, ' ', u.apellido) as usuario, u.tipo_usuario, u.usuario_id, u.nombre_usuario
-                     FROM usuarios AS u
-                     WHERE u.usuario_id = ? AND u.activo = 1;`
+                    FROM usuarios AS u
+                    WHERE u.usuario_id = ? AND u.activo = 1;`
         const [result] = await conexion.execute(sql, [usuario_id]);
         return result[0];
     };
 
     buscarCliente = async (req,res) => {
         const sql = `SELECT CONCAT(u.nombre, ' ', u.apellido) as usuario, u.tipo_usuario, u.usuario_id, u.nombre_usuario
-                     FROM usuarios AS u
-                     WHERE u.tipo_usuario = 3 AND u.activo = 1;`
+                    FROM usuarios AS u
+                    WHERE u.tipo_usuario = 3 AND u.activo = 1;`
         const [result] = await conexion.execute(sql);
         return result;
     };
