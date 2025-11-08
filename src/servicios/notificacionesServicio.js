@@ -70,7 +70,7 @@ export default class NotificacionesServicio {
         try {
             const datos = reserva.datos || reserva;
             
-            // Formatear la fecha
+            
             const fecha = new Date(datos.fecha_reserva || reserva.fecha_reserva).toLocaleDateString('es-AR', {
                 year: 'numeric',
                 month: 'long',

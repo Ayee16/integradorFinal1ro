@@ -66,7 +66,7 @@ export default class ServiciosControlador{
                 })
             }
 
-            apicache.clear('/api/v1/servicios'); //cualquier cosa borrar
+            apicache.clear('/api/v1/servicios');
 
             res.json({
                 estado: true, 
@@ -88,7 +88,7 @@ export default class ServiciosControlador{
             const servicio_id = req.params.servicio_id;
             const datos = req.body;
 
-            // llamar al método modificar de la instancia
+            
             const servicioModificado = await this.ServiciosServicio.modificar(servicio_id, datos);
 
             if (!servicioModificado) {
@@ -98,7 +98,7 @@ export default class ServiciosControlador{
                 });
             }
 
-            apicache.clear('/api/v1/servicios'); //cualquier cosa borrar
+            apicache.clear('/api/v1/servicios');
 
             res.json({
                 estado: true,
@@ -126,7 +126,7 @@ export default class ServiciosControlador{
                 });
             }
             
-            apicache.clear('/api/v1/servicios'); //cualquier cosa borrar
+            apicache.clear('/api/v1/servicios');
 
             res.json({
                 estado: true,

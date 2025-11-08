@@ -154,7 +154,7 @@ export default class ReservasControlador{
             });
         }
 
-        apicache.clear('/api/v1/reservas'); //cualquier cosa borrar
+        apicache.clear('/api/v1/reservas');
 
         res.json({
             estado: true,
@@ -206,7 +206,7 @@ export default class ReservasControlador{
                 })
             }
 
-            // Procesar el array de filas en un objeto único con servicios agrupados
+            
             const datos = [];
             nuevaReservaFilas.forEach(fila => {
                 let reservaExistente = datos.find(r => r.reserva_id === fila.reserva_id);
@@ -240,7 +240,7 @@ export default class ReservasControlador{
                 }
             });
 
-            apicache.clear('/api/v1/reservas'); //cualquier cosa borrar
+            apicache.clear('/api/v1/reservas'); 
 
             res.json({
                 estado: true, 
@@ -271,7 +271,7 @@ export default class ReservasControlador{
                 });
             }
 
-            apicache.clear('/api/v1/reservas'); //cualquier cosa borrar
+            apicache.clear('/api/v1/reservas'); 
 
             res.json({
                 estado: true,
@@ -320,43 +320,3 @@ export default class ReservasControlador{
         }
     }
 }
-//     informe = async (req, res) => {
-//         try{
-//             const formato = req.query.formato;
-        
-//             if(!formato || !formatosPermitidos.includes(formato)){
-//                 return res.status(400).send({
-//                     estado: "falla",
-//                     mensaje: "formato inválido para el informe."
-//                 })
-//             }
-
-//         //genero informe
-//             const {buffer,path,headers} = await this.reservasServicio.generarInforme(formato);
-
-//         //setear la cabecera de respuesta
-//             res.set(headers)
-
-//             if (formato === 'pdf'){
-//                 res.status(200).end(buffer); //buffer datos binarios q se almacenan
-//             } else if (formato === 'csv'){
-//             //respuesta al cliente y envio el path
-//                 res.status(200).download(path, (err)=> { //formato de descarga de archivo en un path
-//                     if (err) {
-//                         return res.status(500).send({
-//                             estado: "falla",
-//                             mensaje: "no se pudo generar el informe."
-//                         })
-//                     }
-//                 })
-//             }
-//         }catch(error){
-//             console.log(error)
-//             res.status(500).send({
-//                 estado:"Falla", mensaje: "Error interno en servidor."
-//             });
-//         } 
-//     }
-    
-
-

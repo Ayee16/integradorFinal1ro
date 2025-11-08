@@ -42,7 +42,7 @@ export default class Servicios{
         datos.activo ?? 1,
         servicio_id
     ]);
-    if (resultado.affectedRows === 0) { //si no modifica fila, devuelve false
+    if (resultado.affectedRows === 0) {
         return null;
     }
 

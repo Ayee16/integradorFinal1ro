@@ -37,12 +37,12 @@ export default class InformeServicio {
 
     informeReservasPdf = async (datosReporte) => {
         try{
-            // Validación de datos
+            
             if (!Array.isArray(datosReporte) || datosReporte.length === 0) {
                 throw new Error('No hay datos para generar el PDF');
             }
 
-            // Ruta de la plantilla .hbs
+            
             const plantillaPath = path.join(__dirname, '../utiles/handlebars/informe.hbs');
 
             if (!fs.existsSync(plantillaPath)) {
@@ -58,7 +58,7 @@ export default class InformeServicio {
                 minute: '2-digit'
             });
             
-            // Compila la plantilla con Handlebars
+            
             const template = handlebars.compile(plantillaHtml);
             const htmlFinal = template({ reservas: datosReporte, fechaActual });
 

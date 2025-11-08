@@ -1,4 +1,3 @@
-// src/rutas/informeRutas.js
 import express from "express";
 import { generarInforme } from "../controladores/informeControlador.js";
 

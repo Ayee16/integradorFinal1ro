@@ -22,7 +22,7 @@ const estrategia = new LocalStrategy(
       return done(null, false, { mensaje: "Datos inválidos" });
     }
 
-      const datosLimpios = { //se pasan los datos limpios sin exponer la contra del usuario
+      const datosLimpios = {
         usuario_id: usuario.usuario_id,
         nombre_usuario: usuario.nombre_usuario,
         tipo_usuario: usuario.tipo_usuario

@@ -9,7 +9,7 @@ export default class TurnosControlador {
 
     buscarTodos = async(req,res) =>{
         try{
-            const [turnos] = await this.TurnosServicio.buscarTodos(); //leo la info
+            const [turnos] = await this.TurnosServicio.buscarTodos();
             res.json({
                 estado : true,
                 datos : turnos
@@ -68,7 +68,7 @@ export default class TurnosControlador {
                 })
             }
 
-            apicache.clear('/api/v1/turnos'); //cualquier cosa borrar
+            apicache.clear('/api/v1/turnos');
 
             res.json({
                 estado: true, 
@@ -106,7 +106,7 @@ export default class TurnosControlador {
             });
         }
 
-        apicache.clear('/api/v1/turnos'); //cualquier cosa borrar
+        apicache.clear('/api/v1/turnos');
 
         res.json({
             estado: true,
@@ -137,7 +137,7 @@ export default class TurnosControlador {
                 });
             }
 
-            apicache.clear('/api/v1/turnos'); //cualquier cosa borrar
+            apicache.clear('/api/v1/turnos');
 
             return res.json({
                 estado: true,
